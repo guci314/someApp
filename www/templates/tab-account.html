@@ -1,9 +1,44 @@
-<ion-view view-title="Account">
-  <ion-content>
-    <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
-    </ion-list>
-  </ion-content>
+<ion-view view-title="我的">
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-middle">
+                <img ng-src="img/ionic.png" style="left:50%">
+            </ion-item>
+            <ion-item>
+                <!--<button class="col-50">登录</button>
+                <button class="col-50">注册</button>-->
+                <div class="button-bar">
+                    <a class="button">登录</a>
+                    <a class="button" ui-sref="tab.register">注册</a>
+                </div>
+            </ion-item>
+            <ion-item>
+                <div class="button-bar">
+                    <a class="button">钱包</a>
+                    <a class="button">卡卷</a>
+                    <a class="button">月卡续费</a>
+                </div>
+            </ion-item>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" href="#/tab/chats">
+                <img ng-src="img/mike.png">
+                <h2>绑定车辆</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" href="#/tab/chats">
+                <img ng-src="img/mike.png">
+                <h2>停车记录</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" href="#/tab/chats">
+                <img ng-src="img/mike.png">
+                <h2>消息通知</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap" href="#/tab/chats">
+                <img ng-src="img/mike.png">
+                <h2>关于我们</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </ion-list>
+    </ion-content>
 </ion-view>
