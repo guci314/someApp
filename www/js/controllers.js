@@ -46,4 +46,10 @@ angular.module('starter.controllers', [])
 
                 UserService.GetById(30).then(handleSuccess, handleError);
             }
+        })
+        
+        .controller('RegisterCtrl', function ($scope) {
+            $scope.getAuthcode = function(){
+                console.log('getAuthcode');
+            };
         });
