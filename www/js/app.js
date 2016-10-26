@@ -6,8 +6,8 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
-
-        .run(function ($ionicPlatform) {
+        .constant('appConfig',{serverPath:'http://localhost:8081/api/'})
+        .run(function ($ionicPlatform,$rootScope) {
             $ionicPlatform.ready(function () {
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // for form inputs)
@@ -20,7 +20,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                     // org.apache.cordova.statusbar required
                     StatusBar.styleDefault();
                 }
-            });
+                
+                //$rootScope.phoneNumber=3;
+                //$rootScope.isLogin=true;
+                //$rootScope.isLogin=function(){
+                //  return $rootScope.phoneNumber==null;  
+                //};
+                //$rootScope.$on('user.DidLogin', function (event, args) {
+                //    $state.go('tab.dash');
+                //});
+            })
         })
 
         .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
@@ -52,19 +61,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                         }
                     })
 
-                    .state('tab.chats', {
-                        url: '/chats',
+                    .state('tab.fee', {
+                        url: '/fee',
                         views: {
-                            'tab-chats': {
-                                templateUrl: 'templates/tab-chats.html',
-                                controller: 'ChatsCtrl'
+                            'tab-fee': {
+                                templateUrl: 'templates/tab-fee.html',
+                                controller: 'FeeCtrl'
                             }
                         }
                     })
                     .state('tab.chat-detail', {
                         url: '/chats/:chatId',
                         views: {
-                            'tab-chats': {
+                            'tab-fee': {
                                 templateUrl: 'templates/chat-detail.html',
                                 controller: 'ChatDetailCtrl'
                             }
@@ -116,6 +125,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                         views: {
                             'tab-account': {
                                 templateUrl: 'templates/licence.html'
+                            }
+                        }
+                    })
+                    
+                    .state('tab.login', {
+                        url: '/account/login',
+                        views: {
+                            'tab-account': {
+                                templateUrl: 'templates/login.html',
+                                controller: 'LoginCtrl'
+                            }
+                        }
+                    })
+                    
+                    .state('tab.account-detail', {
+                        url: '/account/account-detail',
+                        views: {
+                            'tab-account': {
+                                templateUrl: 'templates/account-detail.html',
+                                controller: 'Account-detailCtrl'
                             }
                         }
                     });

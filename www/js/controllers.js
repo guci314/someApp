@@ -2,7 +2,7 @@ angular.module('starter.controllers', [])
 
         .controller('DashCtrl', function ($scope) {})
 
-        .controller('ChatsCtrl', function ($scope, Chats) {
+        .controller('FeeCtrl', function ($scope, Chats) {
             // With the new view caching in Ionic, Controllers are only called
             // when they are recreated or on app start, instead of every page change.
             // To listen for when this page is active (for example, to refresh data),
@@ -21,13 +21,13 @@ angular.module('starter.controllers', [])
             $scope.chat = Chats.get($stateParams.chatId);
         })
 
-        .controller('AccountCtrl', function ($scope) {
+        .controller('AccountCtrl', function ($scope,$rootScope,$ionicPopup) {
             $scope.settings = {
                 enableFriends: true
             };
         })
 
-        .controller('TestCtrl', function ($scope, $ionicPopup, UserService) {
+        .controller('TestCtrl', function ($scope, $ionicPopup) {
             $scope.settings = {
                 enableFriends: true
             };
@@ -44,12 +44,35 @@ angular.module('starter.controllers', [])
                     });
                 }
 
-                UserService.GetById(30).then(handleSuccess, handleError);
+                //UserService.GetById(30).then(handleSuccess, handleError);
             }
         })
-        
-        .controller('RegisterCtrl', function ($scope) {
-            $scope.getAuthcode = function(){
+
+        .controller('RegisterCtrl', function ($scope, $ionicPopup, RegisterService) {
+            $scope.getAuthcode = function () {
                 console.log('getAuthcode');
             };
+            $scope.sendData = {
+                phoneNumber: '',
+                valideCode: '',
+                password: ''
+            };
+            $scope.register = function () {
+                handleResponse = function (data) {
+                    if (data) {
+                        var alertPopup = $ionicPopup.alert({
+                            title: '注册成功'
+                        });
+                    } else {
+                        var alertPopup = $ionicPopup.alert({
+                            title: '注册失败'
+                        });
+                    }
+                };
+                console.log($scope.sendData.phoneNumber);
+                RegisterService.register($scope.sendData.phoneNumber, $scope.sendData.validCode, $scope.sendData.password).then(handleResponse);
+            };
+
         });
+
+        

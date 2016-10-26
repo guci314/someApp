@@ -1,0 +1,28 @@
+<ion-view title ="登录" cache-view="false" hide-back-button="false" has-header="true" hide-nav-bar="false">
+  <ion-content class=" padding" scroll="false">
+    <form class="padding">
+      <div class="list">
+        <div class="item item-icon-left">
+          <i class="icon ion-iphone"></i>
+          <span class="item-input">
+            <input type="tel" name="t" placeholder="电话号码" ng-model="entity.phoneNumber" required>
+          </span>
+        </div>
+        <div class="item item-icon-left">
+          <i class="icon ion-key"></i>
+          <span class="item-input">
+            <input type="password" placeholder="密码" ng-model="entity.password" required>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="row">
+      <button class="button button-block button-positive" type="button" ng-click="login()" >登录
+      </button>
+    </div>
+
+    <div class="row padding">
+      <a class="col col-50 col-offset-50 text-right" ng-click="goRegister()">忘了密码</a>
+    </div>
+  </ion-content>
+</ion-view>
