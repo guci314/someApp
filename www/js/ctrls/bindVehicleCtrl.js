@@ -1,10 +1,19 @@
 angular.module('starter.controllers')
-    .controller('BindVehicleCtrl', function($scope, $rootScope, $state, $ionicPopup, VehicleService) {
+    .controller('BindVehicleCtrl', function($scope, $rootScope, $state, $ionicPopup,$ionicPopover, VehicleService) {
 
         $scope.entity = {
             vehicleNumber: '',
             autoCharge: true
         };
+
+        $scope.animation = 'slide-in-up';
+
+        $ionicPopover.fromTemplateUrl('templates/popover.html', {
+            scope: $scope,
+            animation: $scope.animation
+        }).then(function(popover) {
+            $scope.popover = popover;
+        });
 
         // VehicleService.findVehiclesByPhoneNumber($rootScope.currentUser.phoneNumber).then(handleResponse);
 
@@ -35,7 +44,9 @@ angular.module('starter.controllers')
         $scope.bindPlate = function() {
             for (var v in $rootScope.currentUser.vehicles) {
                 if ($rootScope.currentUser.vehicles[v].plate == $scope.entity.vehicleNumber) {
-                    $ionicPopup.alert({ title: "不能重复绑定" });
+                    $ionicPopup.alert({
+                        title: "不能重复绑定"
+                    });
                     return;
                 }
             };

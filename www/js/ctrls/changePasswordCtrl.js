@@ -30,10 +30,10 @@ angular.module('starter.controllers')
                         saveUser = function (user) {
                             $rootScope.currentUser = user;
                         };
-                        RegisterService.getUserByPhoneNumber($scope.entity.phoneNumber).then(saveUser);
+                        RegisterService.getUserByPhoneNumber($rootScope.currentUser.phoneNumber).then(saveUser);
                         //$rootScope.currentUser.phoneNumber=$scope.entity.phoneNumber;
                         //$rootScope.isLogin = true;
-                        $state.go('tab.account');
+                        $state.go('tab.account-detail');
                     } else {
                         $ionicPopup.alert({
                             title: '修改密码失败'

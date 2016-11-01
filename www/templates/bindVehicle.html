@@ -4,11 +4,12 @@
             <ion-list>
                 <ion-item class="item-input">
                     <span class="input-label">车牌号</span>
-                    <input type="text" name="plate" placeholder="   请输入车牌号" ng-model="entity.vehicleNumber" ng-pattern="/^[\u4e00-\u9fa5]{1}[A-Za-z]{1}[A-Z_0-9]{5}$/" pattern-msg="您的车牌号输入有误" required>
+                    <input type="text" name="plate" placeholder="   请输入车牌号" ng-model="entity.vehicleNumber" ng-pattern="/^[\u4e00-\u9fa5]{1}[A-Za-z]{1}[A-Z_0-9]{5}$/" required>
+                    <button class="button button-icon ion-more" ng-click="popover.show($event)"></button>
                 </ion-item>
                 <span style="color:red" ng-show="bindPlateForm.plate.$dirty && bindPlateForm.plate.$invalid">
                     <span ng-show="bindPlateForm.plate.$error.required">车牌号是必须的。</span>
-                    <span ng-show="bindPlateForm.plate.$invalid">车牌号不正确。</span>
+                <span ng-show="bindPlateForm.plate.$invalid">车牌号不正确。</span>
                 </span>
                 <li class="item item-toggle">
                     自动扣费
@@ -24,6 +25,7 @@
                 添加车辆
             </button>
         </form>
+        <h3>已绑定车辆</h3>
         <ion-list>
             <ion-item ng-repeat="vehicle in currentUser.vehicles" type="item-text-wrap">
                 <div class="row">
@@ -36,4 +38,13 @@
             </ion-item>
         </ion-list>
     </ion-content>
+    <script id="templates/popover.html" type="text/ng-template">
+        <ion-popover-view class="customTrans" style="height: 60px">
+            <ion-content>
+                <!-- <div class="list"> -->
+                车牌号第一位必须是汉字.英文字母必须大写.不必输入-
+                <!-- </div> -->
+            </ion-content>
+        </ion-popover-view>
+    </script>
 </ion-view>
