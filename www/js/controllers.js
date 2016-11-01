@@ -27,28 +27,7 @@ angular.module('starter.controllers', [])
             };
         })
 
-        .controller('TestCtrl', function ($scope, $ionicPopup) {
-            $scope.settings = {
-                enableFriends: true
-            };
-            $scope.test = function () {
-                handleSuccess = function (data) {
-                    var alertPopup = $ionicPopup.alert({
-                        title: data.name
-                    });
-                }
-
-                handleError = function (error) {
-                    var alertPopup = $ionicPopup.alert({
-                        title: error.message
-                    });
-                }
-
-                //UserService.GetById(30).then(handleSuccess, handleError);
-            }
-        })
-
-        .controller('RegisterCtrl', function ($scope, $ionicPopup, RegisterService) {
+        .controller('RegisterCtrl', function ($scope, $ionicPopup,$state, RegisterService) {
             $scope.getAuthcode = function () {
                 console.log('getAuthcode');
             };
@@ -63,13 +42,13 @@ angular.module('starter.controllers', [])
                         var alertPopup = $ionicPopup.alert({
                             title: '注册成功'
                         });
+                        $state.go('tab.account');
                     } else {
                         var alertPopup = $ionicPopup.alert({
                             title: '注册失败'
                         });
                     }
                 };
-                console.log($scope.sendData.phoneNumber);
                 RegisterService.register($scope.sendData.phoneNumber, $scope.sendData.validCode, $scope.sendData.password).then(handleResponse);
             };
 

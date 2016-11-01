@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-        .controller('LoginCtrl', function ($scope,$rootScope,$state, $ionicPopup, RegisterService) {
+        .controller('LoginCtrl', function ($scope,$rootScope,$state, $ionicPopup,localStorageService, RegisterService) {
             $scope.entity = {
                 phoneNumber: '',
                 password: ''
@@ -14,6 +14,7 @@ angular.module('starter.controllers')
                         });
                         saveUser=function(user){
                             $rootScope.currentUser=user;
+                            //console.log(user.phoneNumber);
                         };
                         RegisterService.getUserByPhoneNumber($scope.entity.phoneNumber).then(saveUser);
                         //$rootScope.currentUser.phoneNumber=$scope.entity.phoneNumber;

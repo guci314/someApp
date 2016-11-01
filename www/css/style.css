@@ -2,3 +2,16 @@
 .bar-setting {
     background:url(img/icons/gear-b.png) no-repeat center;
   }
+
+/*
+ion-option-button.button.button-assertive {
+  border-style: solid;
+  border-width: 5px;
+  border-color: green;
+}
+*/
+
+.border-button {
+	border-color: black
+	border-style: solid;
+}

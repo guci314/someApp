@@ -1,48 +1,48 @@
 <ion-view view-title="我的">
     <ion-content>
         <ion-list>
-            <ion-item ui-sref="tab.account-detail" class="item-remove-animate item-avatar item-icon-middle">
+            <ion-item class="item-remove-animate item-avatar item-icon-middle">
                 <img  ng-src="img/mike.png" style="left:50%">
             </ion-item>
             <ion-item ng-hide="isLogin">
                 <!--<button class="col-50">登录</button>
                 <button class="col-50">注册</button>-->
                 <div class="button-bar" >
-                    <a class="button" ui-sref="tab.login">登录</a>
-                    <a class="button" ui-sref="tab.register">注册</a>
+                    <a style='border-color:black' class="button button-positive" ui-sref="tab.login">登录</a>
+                    <a style='border-color:black' class="button button-positive" ui-sref="tab.register">注册</a>
                 </div>
                 
             </ion-item>
             <ion-item>
                 <div class="button-bar">
-                    <a class="button button-positive">钱包</a>
-                    <a class="button button-positive">卡卷</a>
-                    <a class="button button-positive">月卡续费</a>
+                    <a style='border-color:black' class="button button-positive" ui-sref="tab.wallet" ng-disabled="!isLogin">钱包</a>
+                    <a style='border-color:black' class="button button-positive" ng-disabled="!isLogin">卡卷</a>
+                    <a style='border-color:black' class="button button-positive" ng-disabled="!isLogin">月卡续费</a>
                 </div>
             </ion-item>
             <!--<img ng-src="img/icons/ios7-person.png">-->
             <ion-item  ng-show='isLogin' ui-sref="tab.account-detail" class="item-remove-animate item-avatar item-icon-left  item-icon-right" type="item-text-wrap">
-                <i class="icon ion-person"></i>
+                <i class="icon ion-person positive"></i>
                 <h2>账户设置</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-            <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" href="#/tab/chats">
-                <i class="icon ion-android-bus"></i>
+            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ui-sref='tab.bindVehicle'>
+                <i class="icon ion-android-bus positive"></i>
                 <h2>绑定车辆</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-            <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" href="#/tab/chats">
-                <i class="icon ion-ios-paper"></i>
+            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ui-sref="tab.aboutus">
+                <i class="icon ion-ios-paper positive"></i>
                 <h2>停车记录</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-            <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" href="#/tab/chats">
-                <i class="icon ion-ios-email"></i>
+            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ui-sref="tab.aboutus">
+                <i class="icon ion-ios-email positive"></i>
                 <h2>消息通知</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-            <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" href="#/tab/chats">
-                <i class="icon ion-android-contacts"></i>
+            <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ui-sref="tab.aboutus">
+                <i class="icon ion-android-contacts positive"></i>
                 <h2>关于我们</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>

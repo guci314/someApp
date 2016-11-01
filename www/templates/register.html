@@ -1,20 +1,4 @@
 <ion-view title="注册" cache-view="false" hide-back-button="false" has-header="true" hide-nav-bar="false">
-    <script>
-        function validatemobile(mobile)
-        {
-        if (mobile.length == 0)
-        {
-        return false;
-        }
-        if (mobile.length != 11)
-        {
-        return false;
-        }
-
-        var myreg = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,2,3,5-9]))\\d{8}$/;
-        return myreg.test(mobile);
-        }
-    </script>
     <ion-content class="padding" scroll="false">
         <form name="myForm" novalidate="novalidate">
             <div class="list">

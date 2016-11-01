@@ -1,45 +1,45 @@
 var services = angular.module('starter.services', []);
 
 //chat service
-services.factory('Chats', function () {
+services.factory('Chats', function() {
     // Might use a resource here that returns a JSON array
 
     // Some fake testing data
     var chats = [{
-            id: 0,
-            name: 'Ben Sparrow',
-            lastText: 'You on your way?',
-            face: 'img/ben.png'
-        }, {
-            id: 1,
-            name: 'Max Lynx',
-            lastText: 'Hey, it\'s me',
-            face: 'img/max.png'
-        }, {
-            id: 2,
-            name: 'Adam Bradleyson',
-            lastText: 'I should buy a boat',
-            face: 'img/adam.jpg'
-        }, {
-            id: 3,
-            name: 'Perry Governor',
-            lastText: 'Look at my mukluks!',
-            face: 'img/perry.png'
-        }, {
-            id: 4,
-            name: 'Mike Harrington',
-            lastText: 'This is wicked good ice cream.',
-            face: 'img/mike.png'
-        }];
+        id: 0,
+        name: 'Ben Sparrow',
+        lastText: 'You on your way?',
+        face: 'img/ben.png'
+    }, {
+        id: 1,
+        name: 'Max Lynx',
+        lastText: 'Hey, it\'s me',
+        face: 'img/max.png'
+    }, {
+        id: 2,
+        name: 'Adam Bradleyson',
+        lastText: 'I should buy a boat',
+        face: 'img/adam.jpg'
+    }, {
+        id: 3,
+        name: 'Perry Governor',
+        lastText: 'Look at my mukluks!',
+        face: 'img/perry.png'
+    }, {
+        id: 4,
+        name: 'Mike Harrington',
+        lastText: 'This is wicked good ice cream.',
+        face: 'img/mike.png'
+    }];
 
     return {
-        all: function () {
+        all: function() {
             return chats;
         },
-        remove: function (chat) {
+        remove: function(chat) {
             chats.splice(chats.indexOf(chat), 1);
         },
-        get: function (chatId) {
+        get: function(chatId) {
             for (var i = 0; i < chats.length; i++) {
                 if (chats[i].id === parseInt(chatId)) {
                     return chats[i];
@@ -50,87 +50,136 @@ services.factory('Chats', function () {
     };
 });
 
-//user service
-//function UserService($http,appConfig) {
-//
-//    var service = {};
-//
-//    service.GetByPhoneNumber = GetByPhoneNumber;
-//    service.Update = Update;
-//    
-//    usersUrl = appConfig.serverPath+'users';
-//    return service;
-//
-//    function GetByPhoneNumber(phoneNumber) {
-//        return $http.get(usersUrl + '?phoneNumber=' +phoneNumber ).then(handleSuccess, handleError('Error getting user by username'));
-//    }
-//
-//    function Update(user) {
-//        return $http.put(usersUrl + '/' + user.id, user).then(handleSuccess, handleError('Error updating user'));
-//    }
-//    
-//    // private functions
-//
-//    function handleSuccess(res) {
-//        return res.data;
-//    }
-//
-//    function handleError(error) {
-//        return function () {
-//            return {
-//                success: false,
-//                message: error
-//            };
-//        };
-//    }
-//
-//}
-//
-//UserService.$inject = ['$http',appConfig];
-//services.factory('UserService', UserService);
 
 //register service
-function RegisterService($http,appConfig) {
+function RegisterService($http, appConfig) {
     var service = {};
-    service.register = function (phoneNumber, validCode, password) {
+    service.register = function(phoneNumber, validCode, password) {
         function handleResponse(res) {
             return res.data;
         }
-        data = {  
-          'phoneNumber': phoneNumber,  
-          'password': password,
-          'validCode':validCode  
+        data = {
+            'phoneNumber': phoneNumber,
+            'password': password,
+            'validCode': validCode
         };
-        return $http.post(appConfig.serverPath+'registerService/register',data).then(handleResponse);
+        return $http.post(appConfig.serverPath + 'registerService/register', data).then(handleResponse);
     };
-    service.login=function(phoneNumber, password){
-       function handleResponse(res) {
+    service.login = function(phoneNumber, password) {
+        function handleResponse(res) {
             return res.data;
-        }
-　　　　　data = {  
-          'phoneNumber': phoneNumber,  
-          'password': password  
+        }　　　　　
+        data = {
+            'phoneNumber': phoneNumber,
+            'password': password
         };
-        return $http.post(appConfig.serverPath+'registerService/login',data).then(handleResponse);  
+        return $http.post(appConfig.serverPath + 'registerService/login', data).then(handleResponse);
     };
-    service.getUserByPhoneNumber=function (phoneNumber) {
+    service.getUserByPhoneNumber = function(phoneNumber) {
         function handleResponse(res) {
             return res.data;
         }
-        return $http.get(appConfig.serverPath + 'registerService/getUserByPhoneNumber?phoneNumber=' +phoneNumber ).then(handleResponse);
+        return $http.get(appConfig.serverPath + 'registerService/getUserByPhoneNumber?phoneNumber=' + phoneNumber).then(handleResponse);
     };
-    service.changeUserName=function (phoneNumber,name) {
+    service.changeUserName = function(phoneNumber, name) {
         function handleResponse(res) {
             return res.data;
         }
-        data = {  
-          'phoneNumber': phoneNumber,  
-          'name': name  
-        };  
+        data = {
+            'phoneNumber': phoneNumber,
+            'name': name
+        };
         //encodeURIComponent
-        return $http.post(appConfig.serverPath + 'registerService/changeUserName',data).then(handleResponse);
+        return $http.post(appConfig.serverPath + 'registerService/changeUserName', data).then(handleResponse);
+    };
+    service.changePassword = function(phoneNumber, oldPassword, newPassword) {
+        function handleResponse(res) {
+            return res.data;
+        }
+        data = {
+            'phoneNumber': phoneNumber,
+            'oldPassword': oldPassword,
+            'newPassword': newPassword
+        };
+        //encodeURIComponent
+        return $http.post(appConfig.serverPath + 'registerService/changePassword', data).then(handleResponse);
     };
     return service;
-}
-RegisterService.$inject = ['$http','appConfig'];
+};
+
+RegisterService.$inject = ['$http', 'appConfig'];
 services.factory('RegisterService', RegisterService);
+
+function VehicleService($http,appConfig){
+    var service = {};
+    
+    service.bindPlate=function(phoneNumber,plate,autoCharge){
+        function handleResponse(res) {
+            return res.data;
+        }
+        data = {
+            'phoneNumber': phoneNumber,
+            'plate': plate,
+            'autoCharge': autoCharge
+        };
+        return $http.post(appConfig.serverPath + 'vehicleService/bindPlate', data).then(handleResponse);
+    };
+
+    service.findVehiclesByPhoneNumber=function(phoneNumber){
+        function handleResponse(res) {
+            return res.data;
+        }
+        return $http.get(appConfig.serverPath + 'vehicleService/findVehiclesByPhoneNumber?phoneNumber='+phoneNumber).then(handleResponse);
+    };
+
+    service.deleteVehicle=function(id){
+        data = {
+            'id': id
+        };
+
+        function handleResponse(res) {
+            return res.data;
+        }
+
+        return $http.post(appConfig.serverPath+' vehicleService/deleteVehicle',data).then(handleResponse);
+    };
+
+    return service;
+}
+
+VehicleService.$inject=['$http', 'appConfig'];
+services.factory('VehicleService', VehicleService);
+
+function WalletService($http,appConfig){
+    var service = {};
+    
+    service.getBalance=function(phoneNumber){
+        data = {
+            'phoneNumber': phoneNumber
+        };
+
+        function handleResponse(res) {
+            return res.data;
+        }
+
+        return $http.post(appConfig.serverPath+' walletService/getBalance',data).then(handleResponse);
+    };
+
+    service.deposit=function(phoneNumber,amount){
+        data = {
+            'phoneNumber': phoneNumber,
+            'amount':amount
+        };
+
+        function handleResponse(res) {
+            return res.data;
+        }
+
+        return $http.post(appConfig.serverPath+' walletService/deposit',data).then(handleResponse);
+    };
+
+    return service;
+}
+
+WalletService.$inject=['$http', 'appConfig'];
+services.factory('WalletService', WalletService);

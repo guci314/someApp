@@ -2,11 +2,6 @@ angular.module('starter.controllers')
         .controller('Account-detailCtrl',
                 function ($scope, $rootScope, $state, $ionicPopup, RegisterService) {
 
-//        RegisterService.getUserByPhoneNumber($rootScope.phoneNumber)
-//                .then(function(res){
-//                $scope.entity = res;
-//                });
-//                console.log($scope.entity);
                     $scope.changeName = function () {
 
                         function handleResponse(res1) {
@@ -43,6 +38,8 @@ angular.module('starter.controllers')
                         $rootScope.isLogin = false;
                         $state.go('tab.account');
                     };
+                    
+                    
                 }
         );
 

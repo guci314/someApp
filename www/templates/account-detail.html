@@ -1,33 +1,42 @@
 <ion-view cache-view="false" title="账户信息">
-  <ion-content has-header="true">
-    <div class="list">
+    <ion-content has-header="true">
+        <div class="list">
 
-      <div class="item item-avatar-right item-icon-right">
-        <img ng-src="img/mike.png" style="left:50%">
-        <br> 
-      </div>
-      <a class="item item-icon-right" ng-click="changeName()">
-        用户名
-        <span class="item-note">{{currentUser.name}}</span>
-        <i class="icon ion-ios-compose-outline"></i>
-      </a>
-      <a class="item">
-        电话
-        <span class="item-note">{{currentUser.phoneNumber}}</span>
-      </a>
+            <div class="item item-avatar-right item-icon-right">
+                <img ng-src="img/mike.png" style="left:50%">
+                <br> 
+            </div>
+            <a class="item">
+                电话
+                <span class="item-note">{{currentUser.phoneNumber}}</span>
+            </a>
+            <a class="item item-icon-right" ng-click="changeName()">
+                用户名
+                <span class="item-note">{{currentUser.name}}</span>
+                <i class="icon ion-ios-compose-outline"></i>
+            </a>
+            <!--<a class="item item-icon-right" ng-click="changeName()">
+              密码
+              <span class="item-note">{{currentUser.password}}</span>
+              <i class="icon ion-ios-compose-outline"></i>
+            </a>-->
+            <div class="item item-icon-right" ui-sref="tab.changePassword">
+                密码
+                <input class="item-note" type="password" readonly="true" ng-model="currentUser.password">
+                <i class="icon ion-ios-compose-outline"></i>
+            </div>
+        </div>
 
-    </div>
 
+        <div class="list">
+            <a class="item item-icon-right" ui-sref="tab.aboutus">
+                忘了密码
+                <i class="icon ion-ios-arrow-forward"></i>
+            </a>
+        </div>
 
-    <div class="list">
-      <a class="item item-icon-right" ui-sref="register({reset:1})">
-        忘了密码
-        <i class="icon ion-ios-arrow-forward"></i>
-      </a>
-    </div>
-    
-    <a ng-click="logout()" class="button button-block button-large button-positive icon ion-log-out">
-      登出
-    </a>
-  </ion-content>
+        <a ng-click="logout()" class="button button-block button-large button-positive icon ion-log-out">
+            退出账号
+        </a>
+    </ion-content>
 </ion-view>

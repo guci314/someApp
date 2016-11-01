@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/guci/code/someApp/www/js/ctrls/account-detailCtrl.js</file>
+            <file>file:/home/guci/code/someApp/www/templates/changePassword.html</file>
             <file>file:/home/guci/code/someApp/www/js/ctrls/loginCtrl.js</file>
             <file>file:/home/guci/code/someApp/www/js/app.js</file>
-            <file>file:/home/guci/code/someApp/www/templates/account-detail.html</file>
-            <file>file:/home/guci/code/someApp/www/js/controllers.js</file>
+            <file>file:/home/guci/code/someApp/www/templates/tab-account.html</file>
+            <file>file:/home/guci/code/someApp/www/js/ctrls/changePasswordCtrl.js</file>
             <file>file:/home/guci/code/someApp/www/js/services.js</file>
+            <file>file:/home/guci/code/someApp/www/css/style.css</file>
         </group>
     </open-files>
 </project-private>
