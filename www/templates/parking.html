@@ -1,12 +1,48 @@
 <ion-view view-title="停取车">
     <ion-content>
         <div class="row">
-            <button class="button button-block button-positive" type="button" ng-click="confirmParking()">确认存车
+            <button class="button button-block button-positive" type="button" ng-click="requestParking()">请求存车
             </button>
         </div>
         <div class="row">
-            <button class="button button-block button-positive" type="button" ng-click="confirmPickup()">确认取车
+            <button class="button button-block button-positive" type="button" ng-click="modal.show()">请求取车
             </button>
         </div>
+        <script id="templates/modal.html" type="text/ng-template">
+            <ion-modal-view>
+                <ion-header-bar class="bar bar-header bar-positive">
+                    <h1 class="title">停车信息</h1>
+                </ion-header-bar>
+                <ion-content class="padding">
+                    <div class="list">
+                        <label class="item item-input">
+                            <span class="input-label">车牌号:</span>
+                            {{parkingMsg.plate}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">停车场:</span>
+                            {{parkingMsg.carPlace}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">车库:</span>
+                            {{parkingMsg.garage}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">车位:</span>
+                            {{parkingMsg.lot}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">出入口:</span>
+                            {{parkingMsg.entrance}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">时间:</span>
+                            {{parkingMsg.parkingTime}}
+                        </label>
+                        <button class="button button-full button-positive" ng-click="modal.hide()">确定</button>
+                    </div>
+                </ion-content>
+            </ion-modal-view>
+        </script>
     </ion-content>
 </ion-view>

@@ -43,6 +43,32 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
     })
   })
 
+.factory('AuthInterceptor', [function() {  
+    return {
+    // Send the Authorization header with each request
+        'request': function(config) {
+            config.headers = config.headers || {};
+            var encodedString = btoa("guci:123");
+            //config.headers.common['Access-Control-Allow-Origin']='*';
+            //config.headers.useXDomain = true;
+            //config.headers.common = {Access-Control-Allow-Credentials: true};
+            //config.headers.common['Access-Control-Allow-Origin'] = '*';
+            config.headers.Authorization = 'Basic '+encodedString;
+            //config.headers.Authorization = 'Basic ' + 'guci' + ':' + '123';
+            console.log(config);
+           return config;
+        }
+    };
+}])
+
+.config(['$httpProvider', function($httpProvider) {
+    // var encodedString = btoa("guci:123");
+    // $httpProvider.defaults.headers.common.Authorization = 'Basic '+encodedString;
+    //$httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+    //$httpProvider.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
+    $httpProvider.interceptors.push('AuthInterceptor');
+  }])
+
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.tabs.position('bottom');
@@ -59,6 +85,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
     abstract: true,
     templateUrl: 'templates/tabs.html'
   })
+
+  
 
   // Each tab has its own nav history stack:
 
