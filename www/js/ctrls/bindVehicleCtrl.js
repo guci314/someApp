@@ -54,6 +54,9 @@ angular.module('starter.controllers')
 
             function handleResponse(res) {
                 if (res) {
+                    $ionicPopup.alert({
+                        title: "绑定成功"
+                    });
                     $rootScope.currentUser.vehicles.push(res);
                 }
             };　　　　　　　 //粤B9F09C

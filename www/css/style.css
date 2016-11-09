@@ -15,3 +15,19 @@ ion-option-button.button.button-assertive {
 	border-color: black
 	border-style: solid;
 }
+
+.title.title-center.header-item {
+    background-color:white; //#4a87ee;//#F38023!important; // for bg color
+    
+    margin:0px!important;
+    margin-left:0px!important;
+    color: black; //#ffffff!important;
+    text-align: center !important;
+    width: 100%;
+}
+
+.bar.bar-header .button+.title {
+text-align: center !important;
+left: 35px;
+line-height: 46px;
+}

@@ -5,10 +5,11 @@
             </button>
         </div>
         <div class="row">
-            <button class="button button-block button-positive" type="button" ng-click="modal.show()">请求取车
+            <button class="button button-block button-positive" type="button" ng-click="requestPickup()">请求取车
             </button>
         </div>
-        <script id="templates/modal.html" type="text/ng-template">
+
+        <script id="templates/parkingModal.html" type="text/ng-template">
             <ion-modal-view>
                 <ion-header-bar class="bar bar-header bar-positive">
                     <h1 class="title">停车信息</h1>
@@ -39,10 +40,48 @@
                             <span class="input-label">时间:</span>
                             {{parkingMsg.parkingTime}}
                         </label>
-                        <button class="button button-full button-positive" ng-click="modal.hide()">确定</button>
+                        <button class="button button-full button-positive" ng-click="parkingModal.hide()">确定</button>
                     </div>
                 </ion-content>
             </ion-modal-view>
         </script>
+
+        <script id="templates/pickupModal.html" type="text/ng-template">
+            <ion-modal-view>
+                <ion-header-bar class="bar bar-header bar-positive">
+                    <h1 class="title">取车信息</h1>
+                </ion-header-bar>
+                <ion-content class="padding">
+                    <div class="list">
+                        <label class="item item-input">
+                            <span class="input-label">车牌号:</span>
+                            {{pickupMsg.plate}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">停车场:</span>
+                            {{pickupMsg.carPlace}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">车库:</span>
+                            {{pickupMsg.garage}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">车位:</span>
+                            {{pickupMsg.lot}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">取车口:</span>
+                            {{pickupMsg.entrance}}
+                        </label>
+                        <label class="item item-input">
+                            <span class="input-label">取车时间:</span>
+                            {{pickupMsg.pickupTime}}
+                        </label>
+                        <button class="button button-full button-positive" ng-click="pickupModal.hide()">确定</button>
+                    </div>
+                </ion-content>
+            </ion-modal-view>
+        </script>
+
     </ion-content>
 </ion-view>

@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-    .controller('TestCtrl', function($scope, $rootScope, $ionicPopup, RegisterService, VehicleService) {
+    .controller('TestCtrl', function($scope, $rootScope, $ionicPopup, $http,$httpParamSerializer, RegisterService, VehicleService) {
 
         $scope.addTestAccount = function() {
             handleResponse = function(data) {
@@ -35,7 +35,9 @@ angular.module('starter.controllers')
 
         $scope.test = function() {
             RegisterService.getUserByPhoneNumber('18674048896').then(function(res) {
-                $ionicPopup.alert({ title: JSON.stringify(res) });
+                $ionicPopup.alert({
+                    title: JSON.stringify(res)
+                });
             });
             //$ionicPopup.alert({ title: JSON.stringify($rootScope.currentUser) });
         };
@@ -44,4 +46,26 @@ angular.module('starter.controllers')
 
 
         };
+
+        $scope.security = function() {
+            $http({
+                method: 'POST',
+                url: "http://localhost:8081/login",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                // transformRequest: function(obj) {
+                //     var str = [];
+                //     for (var p in obj)
+                //         str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                //     return str.join("&");
+                // },
+                data: $httpParamSerializer({
+                    username: "18674048895",
+                    password: "11111"
+                })
+            }).then(function(res) {
+                console.log(res);
+            });
+        }
     })

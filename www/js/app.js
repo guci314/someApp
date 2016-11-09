@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services'])
   .constant('appConfig', {
-    serverPath: 'http://localhost:8081/api/'
+    serverPath: 'http://192.168.1.107:8081/api/'
   })
   .run(function($ionicPlatform, $rootScope, localStorageService) {
     $ionicPlatform.ready(function() {
@@ -32,44 +32,51 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         $rootScope.currentUser = u;
         $rootScope.isLogin = true;
       }
-      //$rootScope.phoneNumber=3;
-      //$rootScope.isLogin=true;
-      //$rootScope.isLogin=function(){
-      //  return $rootScope.phoneNumber==null;  
-      //};
-      //$rootScope.$on('user.DidLogin', function (event, args) {
-      //    $state.go('tab.dash');
-      //});
     })
   })
 
-.factory('AuthInterceptor', [function() {  
-    return {
-    // Send the Authorization header with each request
-        'request': function(config) {
-            config.headers = config.headers || {};
-            var encodedString = btoa("guci:123");
-            //config.headers.common['Access-Control-Allow-Origin']='*';
-            //config.headers.useXDomain = true;
-            //config.headers.common = {Access-Control-Allow-Credentials: true};
-            //config.headers.common['Access-Control-Allow-Origin'] = '*';
-            config.headers.Authorization = 'Basic '+encodedString;
-            //config.headers.Authorization = 'Basic ' + 'guci' + ':' + '123';
-            console.log(config);
-           return config;
-        }
-    };
-}])
+.service('AuthInterceptor', function($rootScope) {
 
-.config(['$httpProvider', function($httpProvider) {
-    // var encodedString = btoa("guci:123");
-    // $httpProvider.defaults.headers.common.Authorization = 'Basic '+encodedString;
-    //$httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-    //$httpProvider.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
-    $httpProvider.interceptors.push('AuthInterceptor');
-  }])
+  var service = this;
 
-.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  // Send the Authorization header with each request
+  service.request = function(config) {
+    //if (config && config.headers) {
+    if ($rootScope) {
+      if ($rootScope.currentUser) {
+        config.headers = config.headers || {};
+        var s = $rootScope.currentUser.phoneNumber + ":" + $rootScope.currentUser.password;
+        var encodedString = btoa(s);
+        //config.headers.common['Access-Control-Allow-Origin']='*';
+        //config.headers.useXDomain = true;
+        //config.headers.common = {Access-Control-Allow-Credentials: true};
+        //config.headers.common['Access-Control-Allow-Origin'] = '*';
+        config.headers.Authorization = 'Basic ' + encodedString;
+        //config.headers.Authorization = 'Basic ' + 'guci' + ':' + '123';
+        //console.log(config);
+
+
+      }
+    }
+    return config;
+  };
+
+  service.responseError = function(response) {
+    if (response.status === 401) {
+      $rootScope.$broadcast('unauthorized');
+    }
+    return response;
+  };
+  //}
+  //'':function(){}
+
+})
+
+// .config(['$httpProvider', function($httpProvider) {
+//   //$httpProvider.interceptors.push('AuthInterceptor');
+// }])
+
+.config(function($stateProvider, $httpProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.tabs.position('bottom');
 
@@ -86,7 +93,7 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
     templateUrl: 'templates/tabs.html'
   })
 
-  
+
 
   // Each tab has its own nav history stack:
 
@@ -109,6 +116,17 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         }
       }
     })
+
+  .state('tab.parkingRecord', {
+      url: '/parkingRecord',
+      views:{
+        'tab-account': {
+          templateUrl: 'templates/parkingRecord.html',
+          controller: 'ParkingRecordCtrl'
+        }
+      }
+    })
+
     .state('tab.chat-detail', {
       url: '/chats/:chatId',
       views: {
@@ -218,6 +236,15 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
     }
   })
 
+  .state('tab.walletDetail', {
+    url: '/account/walletDetail',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/walletDetail.html'
+      }
+    }
+  })
+
   .state('tab.aboutus', {
     url: '/account/aboutus',
     views: {
@@ -235,6 +262,6 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
   //                    );
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
-
+  $urlRouterProvider.otherwise('/tab/account');
+  $httpProvider.interceptors.push('AuthInterceptor');
 });

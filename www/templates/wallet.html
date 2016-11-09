@@ -1,9 +1,9 @@
 <ion-view title="钱包" cache-view="false" hide-back-button="false" has-header="true" hide-nav-bar="false">
     <ion-content scroll="false">
         <div class="list">
-            <div class="item item-icon-right positive" 　>
+            <div class="item item-icon-right positive">
                 账户余额:{{entity.balance}}
-                <i class="icon ion-clipboard"><label>账户明细</label></i>
+                <i class="icon ion-clipboard"><button class="button button-positive" ui-sref="tab.walletDetail">账户明细</button></i>
             </div>
             <div class="item" style="padding-left: 0 ;padding-right: 0;padding-top: 0;padding-bottom: 0">
                 <div class="list">

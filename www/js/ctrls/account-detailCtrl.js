@@ -17,6 +17,10 @@ angular.module('starter.controllers')
                             };
                         }
 
+                        function handleError(err){
+                            console.log("修改姓名发生错误");
+                        }
+
                         $ionicPopup.prompt({
                             title: '更改真实姓名',
                             template: '请输入你的真实姓名,以便厂家能更好的服务您！',
@@ -25,7 +29,7 @@ angular.module('starter.controllers')
                             cancelText: '取消'
                         }).then(function (res) {
                             if (res && res !== '') {
-                                RegisterService.changeUserName($rootScope.currentUser.phoneNumber, res).then(handleResponse);
+                                RegisterService.changeUserName($rootScope.currentUser.phoneNumber, res).then(handleResponse,handleError);
                                 //UserService.Update({id: $scope.entity.id}, {name: res})
                             }
                         })

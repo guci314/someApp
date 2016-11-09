@@ -1,5 +1,16 @@
 <ion-view view-title="计费">
-  <ion-content>
-    fee page
-  </ion-content>
+    <ion-content class="has-header">
+        <ion-list>
+            <ion-item>
+                <button class="button button-block button-positive" type="button" ng-click="queryFee()">刷新
+                </button>
+            </ion-item>
+            <ion-item>
+                费用:{{entity.fee}}元
+            </ion-item>
+            <ion-item>
+                车牌号:{{entity.plate}}
+            </ion-item>
+        </ion-list>
+    </ion-content>
 </ion-view>

@@ -1,0 +1,23 @@
+<ion-view view-title="停车记录" show-tabs>
+
+  <ion-content>
+    <!-- <ion-refresher pulling-text="下拉刷新" refreshing-text="正在获取消息" on-refresh="sync()">
+    </ion-refresher> -->
+
+    <ion-list class="positive item-text-wrap">
+      <!-- item-avatar -->
+      <ion-item  ng-repeat="rec in records">
+        <span >车牌号:{{rec.plate}}</span><p>
+        <span >车场:{{rec.carPlace}}</span><p>
+        <span >车库:{{rec.garage}}</span><p>
+        <span >存车口:{{rec.parkingEntrance}}</span><p>
+        <span >取车口:{{rec.pickupEntrance}}</span><p>
+        <span >停车时间:{{rec.parkingTime}}</span><p>
+        <span >停留时间:{{rec.residenceTime}}</span><p>
+        <span >费用:{{rec.fee}}</span><p>
+      </ion-item>
+    </ion-list>
+
+
+  </ion-content>
+</ion-view>

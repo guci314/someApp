@@ -82,15 +82,19 @@ function RegisterService($http, appConfig) {
         return $http.get(appConfig.serverPath + 'registerService/getUserByPhoneNumber?phoneNumber=' + phoneNumber).then(handleResponse);
     };
     service.changeUserName = function(phoneNumber, name) {
-        function handleResponse(res) {
-            return res.data;
-        }
+
         data = {
             'phoneNumber': phoneNumber,
             'name': name
         };
         //encodeURIComponent
-        return $http.post(appConfig.serverPath + 'registerService/changeUserName', data).then(handleResponse);
+        return $http.post(appConfig.serverPath + 'registerService/changeUserName', data).success(function(res) {
+                return res.data;
+            })
+            .error(function(err) {
+                console.log("修改姓名发生错误");
+                return null;
+            });
     };
     service.changePassword = function(phoneNumber, oldPassword, newPassword) {
         function handleResponse(res) {
@@ -110,10 +114,10 @@ function RegisterService($http, appConfig) {
 RegisterService.$inject = ['$http', 'appConfig'];
 services.factory('RegisterService', RegisterService);
 
-function VehicleService($http,appConfig){
+function VehicleService($http, appConfig) {
     var service = {};
-    
-    service.bindPlate=function(phoneNumber,plate,autoCharge){
+
+    service.bindPlate = function(phoneNumber, plate, autoCharge) {
         function handleResponse(res) {
             return res.data;
         }
@@ -125,14 +129,14 @@ function VehicleService($http,appConfig){
         return $http.post(appConfig.serverPath + 'vehicleService/bindPlate', data).then(handleResponse);
     };
 
-    service.findVehiclesByPhoneNumber=function(phoneNumber){
+    service.findVehiclesByPhoneNumber = function(phoneNumber) {
         function handleResponse(res) {
             return res.data;
         }
-        return $http.get(appConfig.serverPath + 'vehicleService/findVehiclesByPhoneNumber?phoneNumber='+phoneNumber).then(handleResponse);
+        return $http.get(appConfig.serverPath + 'vehicleService/findVehiclesByPhoneNumber?phoneNumber=' + phoneNumber).then(handleResponse);
     };
 
-    service.deleteVehicle=function(id){
+    service.deleteVehicle = function(id) {
         data = {
             'id': id
         };
@@ -141,19 +145,19 @@ function VehicleService($http,appConfig){
             return res.data;
         }
 
-        return $http.post(appConfig.serverPath+' vehicleService/deleteVehicle',data).then(handleResponse);
+        return $http.post(appConfig.serverPath + 'vehicleService/deleteVehicle', data).then(handleResponse);
     };
 
     return service;
 }
 
-VehicleService.$inject=['$http', 'appConfig'];
+VehicleService.$inject = ['$http', 'appConfig'];
 services.factory('VehicleService', VehicleService);
 
-function WalletService($http,appConfig){
+function WalletService($http, appConfig) {
     var service = {};
-    
-    service.getBalance=function(phoneNumber){
+
+    service.getBalance = function(phoneNumber) {
         data = {
             'phoneNumber': phoneNumber
         };
@@ -162,24 +166,24 @@ function WalletService($http,appConfig){
             return res.data;
         }
 
-        return $http.post(appConfig.serverPath+' walletService/getBalance',data).then(handleResponse);
+        return $http.post(appConfig.serverPath + 'walletService/getBalance', data).then(handleResponse);
     };
 
-    service.deposit=function(phoneNumber,amount){
+    service.deposit = function(phoneNumber, amount) {
         data = {
             'phoneNumber': phoneNumber,
-            'amount':amount
+            'amount': amount
         };
 
         function handleResponse(res) {
             return res.data;
         }
 
-        return $http.post(appConfig.serverPath+' walletService/deposit',data).then(handleResponse);
+        return $http.post(appConfig.serverPath + 'walletService/deposit', data).then(handleResponse);
     };
 
     return service;
 }
 
-WalletService.$inject=['$http', 'appConfig'];
+WalletService.$inject = ['$http', 'appConfig'];
 services.factory('WalletService', WalletService);
