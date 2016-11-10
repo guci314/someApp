@@ -1,0 +1,13 @@
+<ion-view cache-view="true" title="消息通知">
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="message in messages" type="item-text-wrap" href="#/tab/message/{{message.id}}">
+                <h2>{{message.title}}</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+                <ion-option-button class="button-assertive" ng-click="remove(message)">
+                    删除
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

@@ -1,4 +1,4 @@
-var services = angular.module('starter.services', []);
+var services = angular.module('starter.services', ['ngResource']);
 
 //chat service
 services.factory('Chats', function() {
@@ -63,7 +63,17 @@ function RegisterService($http, appConfig) {
             'password': password,
             'validCode': validCode
         };
-        return $http.post(appConfig.serverPath + 'registerService/register', data).then(handleResponse);
+        try{
+        var p=$http.post(appConfig.serverPath + 'registerService/register', data)
+        .then(handleResponse)
+        .catch((err)=>{
+            console.log("shit");
+        });
+        return p;
+        }catch(err){
+            console.log("catch error in register");
+          return null;  
+        };
     };
     service.login = function(phoneNumber, password) {
         function handleResponse(res) {

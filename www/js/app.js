@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services','ngResource'])
   .constant('appConfig', {
-    serverPath: 'http://192.168.1.107:8081/api/'
+    serverPath: 'http://localhost:8081/api/'
   })
   .run(function($ionicPlatform, $rootScope, localStorageService) {
     $ionicPlatform.ready(function() {
@@ -79,6 +79,7 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
 .config(function($stateProvider, $httpProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.tabs.position('bottom');
+  $ionicConfigProvider.backButton.text('后退');
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -185,6 +186,27 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
       }
     }
   })
+
+  .state('tab.message', {
+    url: '/message',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/message.html',
+        controller: 'MessageCtrl'
+      }
+    }
+  })
+
+  .state('tab.message-detail', {
+      url: '/message/:messageId',
+      views: {
+        'tab-account': {
+          templateUrl: 'templates/message-detail.html',
+          controller: 'MessageDetailCtrl'
+        }
+      }
+    })
+
 
   .state('tab.login', {
     url: '/account/login',

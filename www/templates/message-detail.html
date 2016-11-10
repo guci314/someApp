@@ -1,0 +1,26 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="消息内容">
+    <!-- class="padding" -->
+    <ion-content>
+        <ion-list>
+            <ion-item>
+                标题:{{message.title}}
+            </ion-item>
+            <ion-item>
+                内容:
+            </ion-item>
+            <ion-item-note>
+                {{message.content}}</p>
+            </ion-item-note>
+            
+        </ion-list>
+        <ion-toggle ng-model="readed">
+            设为已阅读
+        </ion-toggle>
+    </ion-content>
+</ion-view>
