@@ -46,6 +46,24 @@
                 <h2>关于我们</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
+            <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ng-click="update()">
+                <i class="icon ion-android-contacts positive"></i>
+                <h2>检查新版本</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
         </ion-list>
+
+        <script id="templates/progressModal.html" type="text/ng-template">
+            <ion-modal-view>
+                <ion-header-bar class="bar bar-header bar-positive">
+                    <h1 class="title">正在下载,请稍候</h1>
+                </ion-header-bar>
+                <ion-content class="padding">
+                    <div class="bar bar-subheader bar-positive" style="padding:0px;height: 8px;top:30%">
+                        <progress id="progressbar" max="100" value="{{ downloadProgress }}" class="progress"> </progress>
+                    </div>
+                </ion-content>
+            </ion-modal-view>
+        </script>
     </ion-content>
 </ion-view>

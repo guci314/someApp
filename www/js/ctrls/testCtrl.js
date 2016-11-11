@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-    .controller('TestCtrl', function($scope, $rootScope, $ionicPopup, $http,$httpParamSerializer, RegisterService, VehicleService) {
+    .controller('TestCtrl', function($scope, $rootScope, $ionicPopup, $http, $httpParamSerializer, $cordovaFileTransfer, RegisterService, VehicleService) {
 
         $scope.addTestAccount = function() {
             handleResponse = function(data) {
@@ -67,5 +67,45 @@ angular.module('starter.controllers')
             }).then(function(res) {
                 console.log(res);
             });
-        }
-    })
+        };
+
+        $scope.download = function() {
+            ionic.Platform.ready(function() {
+                var url = "http://10.42.0.28:8080/android-debug.apk";
+                var filename = url.split("/").pop();
+                //documentsDirectory externalDataDirectory externalRootDirectory + 'Pictures/' dataDirectory applicationDirectory
+                var targetPath = cordova.file.externalDataDirectory  + filename;
+                alert("cordova.file.externalDataDirectory:"+cordova.file.externalDataDirectory);
+                alert("filename:"+filename);
+                alert('targetPath:'+targetPath);
+                $cordovaFileTransfer.download(url, targetPath, {}, true).then(function(result) {
+                    $scope.hasil = 'Save file on ' + targetPath + ' success!';
+                    window.plugins.webintent.startActivity({
+                            action: window.plugins.webintent.ACTION_VIEW,
+                            url: targetPath,
+                            type: 'application/vnd.android.package-archive' //'text/plain' //'application/vnd.android.package-archive'
+                        },
+                        function() {},
+                        function(e) {
+                            alert('Error launching app update');
+                        }
+                    );
+                }, function(error) {
+                    alert(JSON.stringify(error));
+                    $scope.hasil = 'Error Download file';
+                }, function(progress) {
+                    $scope.downloadProgress = (progress.loaded / progress.total) * 100;
+                });
+            });
+        };
+
+        $scope.test1 = function() {
+            var x = {
+                "gg": "adff",
+                "dd": "fgfgfg"
+            };
+            alert(JSON.stringify(x));
+            alert(window);
+        };
+
+    });

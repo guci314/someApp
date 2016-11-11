@@ -5,11 +5,12 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services','ngResource'])
+angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services', 'ngResource', 'ngCordova'])
   .constant('appConfig', {
-    serverPath: 'http://localhost:8081/api/'
+    serverPath: 'http://192.168.1.108:8081/api/',
+    updateUrl:'http://192.168.1.108:8080/'
   })
-  .run(function($ionicPlatform, $rootScope, localStorageService) {
+  .run(function($ionicPlatform,$http,$cordovaAppVersion,appConfig, $rootScope, localStorageService) {
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -109,34 +110,35 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
   })
 
   .state('tab.fee', {
-      url: '/fee',
-      views: {
-        'tab-fee': {
-          templateUrl: 'templates/tab-fee.html',
-          controller: 'FeeCtrl'
-        }
+    cache: false,
+    url: '/fee',
+    views: {
+      'tab-fee': {
+        templateUrl: 'templates/tab-fee.html',
+        controller: 'FeeCtrl'
       }
-    })
+    }
+  })
 
   .state('tab.parkingRecord', {
-      url: '/parkingRecord',
-      views:{
-        'tab-account': {
-          templateUrl: 'templates/parkingRecord.html',
-          controller: 'ParkingRecordCtrl'
-        }
+    url: '/parkingRecord',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/parkingRecord.html',
+        controller: 'ParkingRecordCtrl'
       }
-    })
+    }
+  })
 
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-fee': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
+  .state('tab.chat-detail', {
+    url: '/chats/:chatId',
+    views: {
+      'tab-fee': {
+        templateUrl: 'templates/chat-detail.html',
+        controller: 'ChatDetailCtrl'
       }
-    })
+    }
+  })
 
   .state('tab.account', {
     url: '/account',
@@ -198,14 +200,14 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
   })
 
   .state('tab.message-detail', {
-      url: '/message/:messageId',
-      views: {
-        'tab-account': {
-          templateUrl: 'templates/message-detail.html',
-          controller: 'MessageDetailCtrl'
-        }
+    url: '/message/:messageId',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/message-detail.html',
+        controller: 'MessageDetailCtrl'
       }
-    })
+    }
+  })
 
 
   .state('tab.login', {
@@ -275,6 +277,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
       }
     }
   });
+
+  
 
   //                    .state('tab.register', {
   //                        url: '/account/register',
