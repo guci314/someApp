@@ -21,14 +21,21 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
     $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform,$ionicModal, $ionicPopup, $http, $httpParamSerializer, $cordovaAppVersion, $cordovaFileTransfer, appConfig) {
+.controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform, $ionicModal, $ionicPopup, $http, $httpParamSerializer, $cordovaAppVersion, $cordovaFileTransfer, appConfig) {
     $scope.update = () => {
         $ionicPlatform.ready(function() {
             //检查更新
-            $http.get(appConfig.updateUrl + 'version.json').then((res) => {
+            $http.get(appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
+                cache: false
+            }).then((res) => {
                 var newVersion = res.data.version;
                 $cordovaAppVersion.getVersionNumber().then(function(version) {
-                    if (newVersion != version) {
+                    if (newVersion == version) {
+                        $ionicPopup.alert({
+                            title: "当前已是最新版本"
+                        });
+
+                    } else {
                         var confirm = $ionicPopup.confirm({
                             title: "发现新版本",
                             template: "现在立即更新吗?",
@@ -76,10 +83,6 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
 
 
                             };
-                        });
-                    } else {
-                        $ionicPopup.alert({
-                            title: 当前已是最新版本
                         });
                     };
                 });
