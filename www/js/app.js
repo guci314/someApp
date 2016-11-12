@@ -8,12 +8,13 @@
 angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services', 'ngResource', 'ngCordova'])
   .constant('appConfig', {
     serverPath: 'http://192.168.1.108:8081/api/',
-    updateUrl:'http://192.168.1.108:8080/'
+    updateUrl: 'http://192.168.1.108:8080/'
   })
-  .run(function($ionicPlatform,$http,$cordovaAppVersion,appConfig, $rootScope, localStorageService) {
+  .run(function($ionicPlatform,$state,$timeout, $http, $cordovaAppVersion, appConfig, $rootScope, localStorageService, $cordovaSplashscreen) {
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
+      //$cordovaSplashscreen.hide();
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);
@@ -33,6 +34,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         $rootScope.currentUser = u;
         $rootScope.isLogin = true;
       }
+
+      
     })
   })
 
@@ -278,7 +281,7 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
     }
   });
 
-  
+
 
   //                    .state('tab.register', {
   //                        url: '/account/register',
