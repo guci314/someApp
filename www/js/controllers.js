@@ -25,76 +25,107 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
     $scope.update = () => {
         $ionicPlatform.ready(function() {
             //检查更新
-            $http.get(appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
-                cache: false
-            }).then(function(res){
-                var newVersion = res.data.version;
-                $cordovaAppVersion.getVersionNumber().then(function(version) {
-                    if (newVersion == version) {
-                        $ionicPopup.alert({
-                            title: "当前已是最新版本"
-                        });
 
-                    } else {
-                        var confirm = $ionicPopup.confirm({
-                            title: "发现新版本",
-                            template: "现在立即更新吗?",
-                            okText: "确定",
-                            cancelText: "取消"
-                        });
-                        confirm.then(function(res) {
-                            if (res) {
-                                var url = appConfig.updateUrl + "android-armv7-debug.apk";
-                                var filename = url.split("/").pop();
-                                //externalDataDirectory documentsDirectory .cacheDirectory applicationStorageDirectory externalRootDirectory + 'Pictures/' dataDirectory applicationDirectory
-                                var targetPath =null;
-                                if (cordova.file.externalDataDirectory != null) {
-                                    targetPath =cordova.file.externalDataDirectory + filename;
-                                }
-                                else{
-                                    targetPath =cordova.file.dataDirectory + filename;    
-                                };
-                                $ionicModal.fromTemplateUrl('templates/progressModal.html', {
-                                    scope: $scope,
-                                    backdropClickToClose: true,
-                                    hardwareBackButtonClose: true
-                                }).then(function(modal) {
-                                    $scope.progressModal = modal;
-                                    $scope.progressModal.show();
-                                    //$scope.showProgress=true;
-                                    $cordovaFileTransfer.download(url, targetPath, {}, true)
-                                        .then((result) => {
-                                                $scope.hasil = 'Save file on ' + targetPath + ' success!';
-                                                $scope.progressModal.hide();
-                                                //$scope.showProgress=false;
-                                                window.plugins.webintent.startActivity({
-                                                        action: window.plugins.webintent.ACTION_VIEW,
-                                                        url: targetPath,
-                                                        type: 'application/vnd.android.package-archive' //'text/plain' //'application/vnd.android.package-archive'
-                                                    },
-                                                    function() {},
-                                                    function(e) {
-                                                        alert('安装程序发生错误');
-                                                    }
-                                                );
-                                            },
-                                            function(error) {
-                                                alert(JSON.stringify(error));
-                                                alert('下载文件发生错误');
-                                                $scope.progressModal.hide();
-                                                //$scope.hasil = '下载文件发生错误';
-                                            },
-                                            function(progress) {
-                                                $scope.downloadProgress = (progress.loaded / progress.total) * 100;
-                                            });
-                                });
-
-
-                            };
-                        });
-                    };
+            var getServerVersion = function() {
+                return $http.get(appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
+                    cache: false
                 });
+            };
+
+            var getLocalVersion = function() {
+                return $cordovaAppVersion.getVersionNumber();
+            };
+
+            var confirm = $ionicPopup.confirm({
+                title: "发现新版本",
+                template: "现在立即更新吗?",
+                okText: "确定",
+                cancelText: "取消"
             });
+
+            var createModalWindow = function() {
+
+                $scope.url = appConfig.updateUrl + "android-armv7-debug.apk";
+                var filename = $scope.url.split("/").pop();
+                //externalDataDirectory documentsDirectory .cacheDirectory applicationStorageDirectory externalRootDirectory + 'Pictures/' dataDirectory applicationDirectory
+                $scope.targetPath = null;
+                if (cordova.file.externalDataDirectory != null) {
+                    $scope.targetPath = cordova.file.externalDataDirectory + filename;
+                } else {
+                    $scope.targetPath = cordova.file.dataDirectory + filename;
+                };
+
+                return $ionicModal.fromTemplateUrl('templates/progressModal.html', {
+                    scope: $scope,
+                    backdropClickToClose: true,
+                    hardwareBackButtonClose: true
+                });
+
+            };
+
+            var download = function() {
+                return new Promise(function(fulfill, reject) {
+                    $scope.progressModal.show();
+                    $cordovaFileTransfer.download($scope.url, $scope.targetPath, {}, true)
+                        .then((result) => {
+                                //$scope.hasil = 'Save file on ' + targetPath + ' success!';
+                                $scope.progressModal.hide();
+                                fulfill(true);
+                            },
+                            function(error) {
+                                alert(JSON.stringify(error));
+                                alert('下载文件发生错误');
+                                $scope.progressModal.hide();
+                                fulfill(false);
+                                //$scope.hasil = '下载文件发生错误';
+                            },
+                            function(progress) {
+                                $scope.downloadProgress = (progress.loaded / progress.total) * 100;
+                            });
+                });
+            };
+
+            var install = function() {
+                window.plugins.webintent.startActivity({
+                        action: window.plugins.webintent.ACTION_VIEW,
+                        url: $scope.targetPath,
+                        type: 'application/vnd.android.package-archive' //'text/plain' //'application/vnd.android.package-archive'
+                    },
+                    function() {},
+                    function(e) {
+                        alert('安装程序发生错误');
+                    }
+                );
+            };
+
+            getServerVersion().then((v) => {
+                $scope.serverVersion = v.data;
+                return getLocalVersion();
+            }).then((v) => {
+                $scope.localVersion = v;
+                if ($scope.serverVersion != $scope.localVersion) {
+                    return confirm;
+                } else {
+                    $ionicPopup.alert({
+                        title: "当前已是最新版本"
+                    });
+                    return false;
+                };
+            }).then((res) => {
+                if (res) {
+                    return createModalWindow();
+                };
+            }).then((modal) => {
+                if (modal) {
+                    $scope.progressModal = modal;
+                    return download();
+                };
+            }).then((res) => {
+                if (res) {
+                    install();
+                }
+            });
+
         });
 
     };
