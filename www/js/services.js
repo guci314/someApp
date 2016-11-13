@@ -66,7 +66,7 @@ function RegisterService($http, appConfig) {
         try{
         var p=$http.post(appConfig.serverPath + 'registerService/register', data)
         .then(handleResponse)
-        .catch((err)=>{
+        .catch(function(err){
             console.log("shit");
         });
         return p;

@@ -27,7 +27,7 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
             //检查更新
             $http.get(appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
                 cache: false
-            }).then((res) => {
+            }).then(function(res){
                 var newVersion = res.data.version;
                 $cordovaAppVersion.getVersionNumber().then(function(version) {
                     if (newVersion == version) {
@@ -44,20 +44,26 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
                         });
                         confirm.then(function(res) {
                             if (res) {
-                                var url = appConfig.updateUrl + "android-debug.apk";
+                                var url = appConfig.updateUrl + "android-armv7-debug.apk";
                                 var filename = url.split("/").pop();
-                                //documentsDirectory externalDataDirectory externalRootDirectory + 'Pictures/' dataDirectory applicationDirectory
-                                var targetPath = cordova.file.externalDataDirectory + filename;
+                                //externalDataDirectory documentsDirectory .cacheDirectory applicationStorageDirectory externalRootDirectory + 'Pictures/' dataDirectory applicationDirectory
+                                var targetPath =null;
+                                if (cordova.file.externalDataDirectory != null) {
+                                    targetPath =cordova.file.externalDataDirectory + filename;
+                                }
+                                else{
+                                    targetPath =cordova.file.dataDirectory + filename;    
+                                };
                                 $ionicModal.fromTemplateUrl('templates/progressModal.html', {
                                     scope: $scope,
-                                    backdropClickToClose: false,
-                                    hardwareBackButtonClose: false
+                                    backdropClickToClose: true,
+                                    hardwareBackButtonClose: true
                                 }).then(function(modal) {
                                     $scope.progressModal = modal;
                                     $scope.progressModal.show();
                                     //$scope.showProgress=true;
                                     $cordovaFileTransfer.download(url, targetPath, {}, true)
-                                        .then(function(result) {
+                                        .then((result) => {
                                                 $scope.hasil = 'Save file on ' + targetPath + ' success!';
                                                 $scope.progressModal.hide();
                                                 //$scope.showProgress=false;
@@ -73,8 +79,10 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
                                                 );
                                             },
                                             function(error) {
-                                                //alert(JSON.stringify(error));
-                                                $scope.hasil = '下载文件发生错误';
+                                                alert(JSON.stringify(error));
+                                                alert('下载文件发生错误');
+                                                $scope.progressModal.hide();
+                                                //$scope.hasil = '下载文件发生错误';
                                             },
                                             function(progress) {
                                                 $scope.downloadProgress = (progress.loaded / progress.total) * 100;
