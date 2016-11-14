@@ -21,7 +21,7 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
     $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope, $rootScope, $ionicPlatform, $ionicModal, $ionicPopup, $http, $httpParamSerializer, $cordovaAppVersion, $cordovaFileTransfer, appConfig) {
+.controller('AccountCtrl', function($scope, $q, $rootScope, $ionicPlatform, $ionicModal, $ionicPopup, $http, $httpParamSerializer, $cordovaAppVersion, $cordovaFileTransfer, appConfig) {
     $scope.update = () => {
         $ionicPlatform.ready(function() {
             //检查更新
@@ -29,11 +29,16 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
             var getServerVersion = function() {
                 return $http.get(appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
                     cache: false
+                }).then((v) => {
+                    $scope.serverVersion = v.data;
                 });
             };
 
             var getLocalVersion = function() {
-                return $cordovaAppVersion.getVersionNumber();
+                return $cordovaAppVersion.getVersionNumber()
+                    .then((v) => {
+                        $scope.localVersion = v;
+                    });
             };
 
             var confirm = $ionicPopup.confirm({
@@ -59,6 +64,9 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
                     scope: $scope,
                     backdropClickToClose: true,
                     hardwareBackButtonClose: true
+                }).then((modal) => {
+                    $scope.progressModal = modal;
+                    return true;
                 });
 
             };
@@ -70,13 +78,13 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
                         .then((result) => {
                                 //$scope.hasil = 'Save file on ' + targetPath + ' success!';
                                 $scope.progressModal.hide();
-                                fulfill(true);
+                                fulfill();
                             },
                             function(error) {
                                 alert(JSON.stringify(error));
                                 alert('下载文件发生错误');
                                 $scope.progressModal.hide();
-                                fulfill(false);
+                                reject("下载文件发生错误");
                                 //$scope.hasil = '下载文件发生错误';
                             },
                             function(progress) {
@@ -98,40 +106,42 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
                 );
             };
 
-            getServerVersion().then((v) => {
-                $scope.serverVersion = v.data;
-                return getLocalVersion();
-            }).then((v) => {
-                $scope.localVersion = v;
-                if ($scope.serverVersion != $scope.localVersion) {
-                    return confirm;
-                } else {
-                    $ionicPopup.alert({
-                        title: "当前已是最新版本"
-                    });
-                    return false;
-                };
-            }).then((res) => {
-                if (res) {
-                    return createModalWindow();
-                };
-            }).then((modal) => {
-                if (modal) {
-                    $scope.progressModal = modal;
-                    return download();
-                };
-            }).then((res) => {
-                if (res) {
-                    install();
-                }
-            });
+
+            var deferred = $q.defer();
+            deferred.reject("stop promise chain");
+            var failedPromise = deferred.promise;
+            getServerVersion()
+                .then(
+                    getLocalVersion
+                )
+                .then(() => {
+                    if ($scope.serverVersion != $scope.localVersion) {
+                        return confirm;
+                    } else {
+                        $ionicPopup.alert({
+                            title: "当前已是最新版本"
+                        });
+
+                        return failedPromise;
+                    };
+                })
+                .then((res) => {
+                    if (res) {
+                        return createModalWindow();
+                    } else {
+                        return failedPromise;
+                    };
+                })
+                .then(download)
+                .then(install);
+
 
         });
 
     };
 })
 
-.controller('RegisterCtrl', function($scope, $ionicPopup, $state, RegisterService) {
+.controller('RegisterCtrl', function($scope,$rootScope, $ionicPopup, $state, RegisterService) {
     $scope.getAuthcode = function() {
         $ionicPopup.alert({
             title: '验证码已发送'
@@ -148,7 +158,21 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
                 var alertPopup = $ionicPopup.alert({
                     title: '注册成功'
                 });
-                $state.go('tab.account');
+                saveUser = function(user) {
+                    $rootScope.currentUser = user;
+                    $rootScope.isLogin = true;
+                    //console.log(user.phoneNumber);
+                };
+                $rootScope.currentUser = {
+                    'phoneNumber': $scope.sendData.phoneNumber,
+                    'password': $scope.sendData.password
+                }
+                RegisterService.getUserByPhoneNumber($scope.sendData.phoneNumber)
+                    .then(saveUser)
+                    .then(function() {
+                        $state.go('tab.account');
+                        //$ionicHistory.clearHistory();
+                    });
             } else {
                 var alertPopup = $ionicPopup.alert({
                     title: '注册失败'
@@ -157,18 +181,15 @@ angular.module('starter.controllers', ['ngCordova.plugins.appVersion'])
         };
         handleError = (err) => {
             $ionicPopup.alert({
-                title: '注册发生错误:' + err
+                title: '注册发生错误'
             });
+            console.log(JSON.stringify(err));
         };
-        try {
-            RegisterService.register($scope.sendData.phoneNumber, $scope.sendData.validCode, $scope.sendData.password)
-                .then(handleResponse)
-                .catch(handleError);
-        } catch (err) {
-            $ionicPopup.alert({
-                title: 'shit'
-            });
-        }
+
+        RegisterService.register($scope.sendData.phoneNumber, $scope.sendData.validCode, $scope.sendData.password)
+            .then(handleResponse)
+            .catch(handleError);
+
     };
 
 });

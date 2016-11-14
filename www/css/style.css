@@ -31,3 +31,12 @@ text-align: center !important;
 left: 35px;
 line-height: 46px;
 }
+
+.show-password {
+  color: $grey;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  height: 40px;
+  line-height: 40px;
+}

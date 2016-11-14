@@ -5,7 +5,6 @@ angular.module('starter.controllers')
             password: ''
         };
         $scope.login = function() {
-            console.log('login');
             RegisterService.login($scope.entity.phoneNumber, $scope.entity.password).then(handleResponse, handleError);
 
             function handleResponse(res) {

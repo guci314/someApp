@@ -1,4 +1,4 @@
-<ion-view title ="登录" cache-view="false" hide-back-button="false" has-header="true" hide-nav-bar="false">
+<ion-view title="登录" cache-view="false" hide-back-button="false" has-header="true" hide-nav-bar="false">
     <ion-content class=" padding" scroll="false">
         <form class="padding" name="myForm" novalidate="novalidate">
             <div class="list">
@@ -8,30 +8,29 @@
                         <input type="tel" name="phone" placeholder="电话号码" ng-model="entity.phoneNumber" ng-pattern="/^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/i" required>
                     </span>
                 </div>
-
                 <span style="color:red" ng-show="myForm.phone.$dirty && myForm.phone.$invalid">
                     <span ng-show="myForm.phone.$error.required">电话号码是必须的。</span>
-                    <span ng-show="myForm.phone.$invalid">电话号码不正确。</span>
+                <span ng-show="myForm.phone.$invalid">电话号码不正确。</span>
                 </span>
-                
                 <div class="item item-icon-left">
                     <i class="icon ion-ios-locked"></i>
                     <span class="item-input">
                         <input type="password" name="password" placeholder="密码" ng-model="entity.password" ng-minlength="5" ng-maxlength="20" required>
+                        
                     </span>
+                    <label for="password">aaaa</label>
+                    <a href="" ng-click="showPassword()" class="show-password"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 </div>
-                
                 <span style="color:red" ng-show="myForm.password.$dirty && myForm.password.$invalid">
                     <span ng-show="myForm.password.$error.required">密码是必须的。</span>
-                    <span ng-show="myForm.password.$invalid">密码长度必须为5到20位</span>
+                <span ng-show="myForm.password.$invalid">密码长度必须为5到20位</span>
                 </span>
             </div>
         </form>
         <div class="row">
-            <button class="button button-block button-positive" type="button" ng-disabled="myForm.$invalid" ng-click="login()" >登录
+            <button class="button button-block button-positive" type="button" ng-disabled="myForm.$invalid" ng-click="login()">登录
             </button>
         </div>
-
         <div class="row padding">
             <a class="col col-50 col-offset-50 text-right" ng-click="goRegister()">忘了密码</a>
         </div>

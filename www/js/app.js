@@ -7,8 +7,8 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services', 'ngResource', 'ngCordova'])
   .constant('appConfig', {
-    serverPath: 'http://192.168.1.109:8081/api/',
-    updateUrl: 'http://192.168.1.109:8080/'
+    serverPath: 'http://10.42.0.28:8081/api/',
+    updateUrl: 'http://10.42.0.28:8080/'
   })
   .run(function($ionicPlatform,$state,$timeout, $http, $cordovaAppVersion, appConfig, $rootScope, localStorageService, $cordovaSplashscreen) {
     $ionicPlatform.ready(function() {
