@@ -1,9 +1,31 @@
 <ion-view view-title="计费">
+    <ion-nav-buttons side="right">
+        <button class="button button-block button-positive" ng-click="queryFee()">
+        <i class="fa fa-refresh fa-2x" aria-hidden="true"></i>
+        </button>
+    </ion-nav-buttons>
     <ion-content class="has-header">
         <ion-list>
-            <ion-item class="item-remove-animate item-avatar item-icon-middle">
-                <img  ng-src="img/mike.png" style="left:50%">
+            <ion-item ng-repeat="car in cars">
+                <div class="row">
+                    <div class="col-80">
+                        <h2>车牌号:{{car.plateNo}}</h2>
+                        <h2>车场:{{car.stockName}}</h2>
+                        <h2>车位:{{car.stockCode}}</h2>
+                        <h2>出入口:{{car.inOutStation}}</h2>
+                        <h2>入库时间:{{car.inTime}}</h2>
+                        <h2>停留时间:{{car.stayMinutes}}分钟</h2>
+                        <h2>金额:{{car.money}}元</h2>
+                    </div>
+                    <div class="col-20">
+                        <!--ng-disabled="{{car.commitFlag}}" -->
+                        <button class="button button-block button-positive" ng-click="CommitOutCar(car.plateNo)">取车</button>
+                    </div>
+                </div>
             </ion-item>
+        </ion-list>
+
+        <!--<ion-list>
             <ion-item>
                 <button class="button button-block button-positive" type="button" ng-click="queryFee()">刷新
                 </button>
@@ -14,6 +36,6 @@
             <ion-item>
                 车牌号:{{entity.plate}}
             </ion-item>
-        </ion-list>
+        </ion-list>-->
     </ion-content>
 </ion-view>

@@ -1,9 +1,12 @@
 angular.module('starter.controllers')
-    .controller('LoginCtrl', function($scope, $rootScope,$ionicHistory, $state, $ionicPopup, localStorageService, RegisterService) {
+    .controller('LoginCtrl', function($scope, $rootScope, $ionicHistory, $state, $ionicPopup, localStorageService, RegisterService) {
         $scope.entity = {
             phoneNumber: '',
             password: ''
         };
+
+        $scope.openEye=true;
+
         $scope.login = function() {
             RegisterService.login($scope.entity.phoneNumber, $scope.entity.password).then(handleResponse, handleError);
 
@@ -38,6 +41,18 @@ angular.module('starter.controllers')
             function handleError(err) {
                 console.log(err);
             };
+        };
+
+        var passwordField = angular.element(document.querySelector('#password'));
+
+        $scope.showPassword = function() {
+            if ($scope.openEye) {
+                $scope.openEye=false;
+                passwordField.attr('type', 'text');
+            } else {
+                $scope.openEye=true;
+                passwordField.attr('type', 'password');
+            }
         };
 
     });

@@ -7,8 +7,11 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services', 'ngResource', 'ngCordova'])
   .constant('appConfig', {
-    serverPath: 'http://10.42.0.28:8081/api/',
-    updateUrl: 'http://10.42.0.28:8080/'
+    serverPath: 'http://183.239.167.94:8083/api/',
+    updateUrl: 'http://183.239.167.94:8082/',
+    carServicePath:'http://183.239.167.94:8084/api/'
+    // serverPath: 'http://localhost:8081/api/',
+    // updateUrl: 'http://192.168.1.110:8080/'
   })
   .run(function($ionicPlatform,$state,$timeout, $http, $cordovaAppVersion, appConfig, $rootScope, localStorageService, $cordovaSplashscreen) {
     $ionicPlatform.ready(function() {
@@ -34,7 +37,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         $rootScope.currentUser = u;
         $rootScope.isLogin = true;
       }
-
+      
+      // $cordovaSplashScreen.hide();
       
     })
   })
@@ -76,14 +80,31 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
 
 })
 
-// .config(['$httpProvider', function($httpProvider) {
-//   //$httpProvider.interceptors.push('AuthInterceptor');
-// }])
+.config(function ($httpProvider) {
+    $httpProvider.interceptors.push(function ($rootScope, $q) {
+        return {
+            request: function (config) {
+                config.timeout = 1000;
+                return config;
+            },
+            responseError: function (rejection) {
+                switch (rejection.status){
+                    case 408 :
+                        alert({title:"连接服务器超时"});
+                        break;
+                }
+                return $q.reject(rejection);
+            }
+        }
+    });
+    $httpProvider.interceptors.push('AuthInterceptor');
+})
 
-.config(function($stateProvider, $httpProvider, $urlRouterProvider, $ionicConfigProvider) {
+.config(function($stateProvider,$httpProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.tabs.position('bottom');
   $ionicConfigProvider.backButton.text('后退');
+  $ionicConfigProvider.navBar.alignTitle('left');
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -273,10 +294,11 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
   })
 
   .state('tab.aboutus', {
-    url: '/account/aboutus',
+    url: '/aboutus',
     views: {
       'tab-account': {
-        templateUrl: 'templates/aboutus.html'
+        templateUrl: 'templates/aboutus.html',
+        controller:'AboutusCtrl'
       }
     }
   });
@@ -292,5 +314,4 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/account');
-  $httpProvider.interceptors.push('AuthInterceptor');
 });

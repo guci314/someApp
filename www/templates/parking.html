@@ -1,9 +1,31 @@
-<ion-view view-title="停取车">
-    <ion-content>
-        <ion-item class="item-remove-animate item-avatar item-icon-middle">
-                <img  ng-src="img/mike.png" style="left:50%">
-        </ion-item>
-        <div class="row">
+<ion-view view-title="停车" cache-view="false">
+    <ion-nav-buttons side="right">
+        <button class="button button-block button-positive" ng-click="refresh()">
+        <i class="fa fa-refresh fa-2x" aria-hidden="true"></i>
+        </button>
+        <!--<button class="button button-block button-positive">刷新</button>-->
+    </ion-nav-buttons>
+    <ion-content  class="has-header">
+        <ion-list>
+            <ion-item ng-repeat="car in cars">
+                <div class="row">
+                    <div class="col-80">
+                        <h2>车场:{{car.stockName}}</h2>
+                        <h2>车牌号:{{car.plateNo}}</h2>
+                        <h2>时间:{{car.inTime}}</h2>
+                        <h2>出入口:{{car.inOutStation}}</h2>
+                        <h2>车位:{{car.binCode}}</h2>
+                    </div>
+                    <div class="col-20">
+                        <!--ng-disabled="{{car.commitFlag}}" -->
+                        <button class="button button-block button-positive" ng-disabled="{{car.commitFlag}}" ng-click="CommitInCar(car.plateNo)">存车</button>
+                    </div>
+                </div>
+                <!--<button ng-click="queryStatus(car.phone,car.plateNo)">查询状态</button>-->
+            </ion-item>
+        </ion-list>
+
+        <!--<div class="row">
             <button class="button button-block button-positive" type="button" ng-click="requestParking()">请求存车
             </button>
         </div>
@@ -84,7 +106,6 @@
                     </div>
                 </ion-content>
             </ion-modal-view>
-        </script>
-
+        </script>-->
     </ion-content>
 </ion-view>

@@ -15,11 +15,14 @@
                 <div class="item item-icon-left">
                     <i class="icon ion-ios-locked"></i>
                     <span class="item-input">
-                        <input type="password" name="password" placeholder="密码" ng-model="entity.password" ng-minlength="5" ng-maxlength="20" required>
-                        
+                        <input type="password" id="password" name="password" placeholder="密码" ng-model="entity.password" ng-minlength="5" ng-maxlength="20" required>
+                        <!-- <label for="password">aaaa</label> -->
+                        <a href="" ng-click="showPassword()" class="show-password">
+                        <i class="fa fa-eye" id="openEye" ng-show="openEye" aria-hidden="true"></i>
+                        <i class="fa fa-eye-slash" id="closeEye" ng-hide="openEye" aria-hidden="true"></i>
+                        </a>
                     </span>
-                    <label for="password">aaaa</label>
-                    <a href="" ng-click="showPassword()" class="show-password"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    
                 </div>
                 <span style="color:red" ng-show="myForm.password.$dirty && myForm.password.$invalid">
                     <span ng-show="myForm.password.$error.required">密码是必须的。</span>
@@ -32,7 +35,7 @@
             </button>
         </div>
         <div class="row padding">
-            <a class="col col-50 col-offset-50 text-right" ng-click="goRegister()">忘了密码</a>
+            <a class="col col-50 col-offset-50 text-right" ui-sref="tab.register">忘了密码</a>
         </div>
     </ion-content>
 </ion-view>

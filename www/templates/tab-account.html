@@ -1,17 +1,31 @@
 <ion-view view-title="我" class="title title-center">
     <ion-content class="has-header">
         <ion-list>
-            <ion-item class="item-remove-animate item-avatar item-icon-middle">
-                <img  ng-src="img/mike.png" style="left:50%">
-            </ion-item>
+            <!--<ion-item class="item-remove-animate item-avatar item-icon-middle">
+                <img  ng-src="img/mike.png" style="left:50%" >            
+            </ion-item>-->
+            <div class="item ">
+                <!--style="left:50%"    -->
+                <!--<div class="row item-avatar">
+                    
+                        <img ng-src="img/mike.png">
+                    
+                </div>
+                <div class="row" style="margin-left:40%">{{currentUser.phoneNumber}}</div>-->
+                
+                <div align="center"><img src="img/icon.png" style="width:100px;height:50">
+                <div style="text-align:center;">{{currentUser.phoneNumber}}</div>
+                </div>
+                
+            </div>
             <ion-item ng-hide="isLogin">
                 <!--<button class="col-50">登录</button>
                 <button class="col-50">注册</button>-->
-                <div class="button-bar" >
+                <div class="button-bar">
                     <a style='border-color:black' class="button button-positive" ui-sref="tab.login">登录</a>
                     <a style='border-color:black' class="button button-positive" ui-sref="tab.register">注册</a>
                 </div>
-                
+
             </ion-item>
             <ion-item>
                 <div class="button-bar">
@@ -21,22 +35,26 @@
                 </div>
             </ion-item>
             <!--<img ng-src="img/icons/ios7-person.png">-->
-            <ion-item  ng-show='isLogin' ui-sref="tab.account-detail" class="item-remove-animate item-avatar item-icon-left  item-icon-right" type="item-text-wrap">
+            <ion-item ng-show='isLogin' ui-sref="tab.account-detail" class="item-remove-animate item-avatar item-icon-left  item-icon-right"
+                type="item-text-wrap">
                 <i class="icon ion-person positive"></i>
                 <h2>账户设置</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ui-sref='tab.bindVehicle'>
+            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap"
+                ui-sref='tab.bindVehicle'>
                 <i class="icon ion-android-bus positive"></i>
                 <h2>绑定车辆</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ui-sref="tab.parkingRecord">
+            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap"
+                ui-sref="tab.parkingRecord">
                 <i class="icon ion-ios-paper positive"></i>
                 <h2>停车记录</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ui-sref="tab.message">
+            <ion-item ng-show='isLogin' class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap"
+                ui-sref="tab.message">
                 <i class="icon ion-ios-email positive"></i>
                 <h2>消息通知</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
@@ -49,6 +67,16 @@
             <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ng-click="update()">
                 <i class="icon ion-android-sync positive"></i>
                 <h2>检查新版本</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ng-click="exit()">
+                <i class="icon ion-android-exit positive"></i>
+                <h2>退出程序</h2>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item ng-show="currentPlatform==='linux'" class="item-remove-animate item-avatar item-icon-left item-icon-right" type="item-text-wrap" ng-click="test()">
+                <i class="icon ion-android-sync positive"></i>
+                <h2>测试</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
         </ion-list>

@@ -136,6 +136,7 @@ function VehicleService($http, appConfig) {
             'plate': plate,
             'autoCharge': autoCharge
         };
+        
         return $http.post(appConfig.serverPath + 'vehicleService/bindPlate', data).then(handleResponse);
     };
 
@@ -143,6 +144,7 @@ function VehicleService($http, appConfig) {
         function handleResponse(res) {
             return res.data;
         }
+        
         return $http.get(appConfig.serverPath + 'vehicleService/findVehiclesByPhoneNumber?phoneNumber=' + phoneNumber).then(handleResponse);
     };
 
