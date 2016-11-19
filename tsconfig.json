@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "target":"es6"
+    },
+    "files": [
+        "www/js/ctrls/feeCtrl.ts",
+        "www/js/ctrls/testCtrl.ts",
+        "typings/tsd.d.ts"
+    ],
+    "include": [
+        "typings/**/*",
+        "www/js/ctrls/*"
+    ]
+}
