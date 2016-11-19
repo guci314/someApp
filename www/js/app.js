@@ -103,7 +103,7 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
 .config(function($stateProvider,$httpProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.tabs.position('bottom');
-  $ionicConfigProvider.backButton.text('后退');
+  $ionicConfigProvider.backButton.text('');
   $ionicConfigProvider.navBar.alignTitle('left');
 
   // Ionic uses AngularUI Router which uses the concept of states

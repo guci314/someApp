@@ -7,14 +7,13 @@
     <ion-list class="positive item-text-wrap">
       <!-- item-avatar -->
       <ion-item  ng-repeat="rec in records">
-        <span >车牌号:{{rec.plate}}</span><p>
-        <span >车场:{{rec.carPlace}}</span><p>
-        <span >车库:{{rec.garage}}</span><p>
-        <span >存车口:{{rec.parkingEntrance}}</span><p>
-        <span >取车口:{{rec.pickupEntrance}}</span><p>
-        <span >停车时间:{{rec.parkingTime}}</span><p>
-        <span >停留时间:{{rec.residenceTime}}</span><p>
-        <span >费用:{{rec.fee}}</span><p>
+        <span >车牌号:{{rec.plateNo}}</span><p>
+        <span >车场:{{rec.stockName}}</span><p>
+        <span >车位:{{rec.stockCode}}</span><p>
+        <span >出入口:{{rec.inOutStation}}</span><p>
+        <span >停车时间:{{rec.createTime}}</span><p>
+        <span >滞留时间:{{rec.stayMinutes}}</span><p>
+        <span >费用:{{rec.money}}</span><p>
       </ion-item>
     </ion-list>
 
