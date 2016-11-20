@@ -15,7 +15,7 @@ function hello(){
 
 angular.module('starter.controllers')
 	.controller('FeeCtrl',
-	function ($scope: IFeeScope, $q: ng.IQService, $timeout: ng.ITimeoutService, $ionicLoading: ionic.loading.IonicLoadingService, $rootScope, $state: ng.ui.IStateService, $ionicPopup: ionic.popup.IonicPopupService, ParkingService) {
+	function ($scope: IFeeScope, $q: ng.IQService, $timeout: ng.ITimeoutService, $ionicLoading: ionic.loading.IonicLoadingService, $rootScope:any, $state: ng.ui.IStateService, $ionicPopup: ionic.popup.IonicPopupService, ParkingService:any) {
 
 		var showLoading = function () {
 			$ionicLoading.show({

@@ -41,7 +41,7 @@ angular.module('starter.controllers')
                 ;
             }
             ;
-            return queryResult;
+            return queryResult.oKFlag;
         });
     }
     ;
@@ -49,11 +49,11 @@ angular.module('starter.controllers')
         showLoading();
         let res = yield ParkingService.CommitInCar($rootScope.currentUser.phoneNumber, aPlateNo);
         console.log(res);
-        let yy = yield checkCarStatus(res.phone, res.plateNo);
+        let code = yield checkCarStatus(res.phone, res.plateNo);
         console.log("get rerult");
-        console.log(yy);
+        console.log(code);
         hideLoading();
-        if (yy.oKFlag === 9) {
+        if (code === 9) {
             $ionicPopup.alert({ title: "停车成功" });
         }
         else {

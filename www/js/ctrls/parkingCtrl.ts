@@ -39,8 +39,8 @@ angular.module('starter.controllers')
 		var hideLoading = function () {
 			$ionicLoading.hide();
 		};
-
-		async function checkCarStatus(phone:string,plateNo:string):Promise<InCarState>{
+        
+		async function checkCarStatus(phone:string,plateNo:string):Promise<number>{
 			var stopQuery = false;
 			var queryResult:InCarState;
 			$timeout(() => { stopQuery = true; }, 3000);
@@ -53,7 +53,7 @@ angular.module('starter.controllers')
 					await delay(1000);
 				};
 			};
-			return queryResult;
+			return queryResult.oKFlag;
 		};
 
 
@@ -61,11 +61,11 @@ angular.module('starter.controllers')
 			showLoading();
 			let res:InCarState =await ParkingService.CommitInCar($rootScope.currentUser.phoneNumber, aPlateNo);
 			console.log(res);
-			let yy=await checkCarStatus(res.phone,res.plateNo);
+			let code=await checkCarStatus(res.phone,res.plateNo);
 			console.log("get rerult");
-			console.log(yy);
+			console.log(code);
 			hideLoading();
-			if (yy.oKFlag === 9) {
+			if (code === 9) {
 				$ionicPopup.alert({ title: "停车成功" });
 			} else {
 				$ionicPopup.alert({ title: "停车失败" });

@@ -4,7 +4,7 @@
 angular.module('starter.controllers')
     
     .controller('TestCtrl',
-    function ($scope, $q, $ionicLoading, $timeout, $rootScope, $ionicPopup, $http, $httpParamSerializer, $cordovaFileTransfer, RegisterService, VehicleService) {
+    function ($scope, $q:ng.IQService, $ionicLoading, $timeout, $rootScope, $ionicPopup:ionic.popup.IonicPopupService, $http, $httpParamSerializer, $cordovaFileTransfer, RegisterService, VehicleService) {
 
         $scope.addTestAccount = function () {
             var handleResponse = function (data:any) {
@@ -236,5 +236,21 @@ angular.module('starter.controllers')
 
             //$timeout($scope.hide, 3000);
         }
+
+        async function f2():Promise<string>{
+            await delay(3000);
+            console.log("f2 finished");
+            return "hello world";
+        }
+
+        $scope.test2= async function (){
+            //$ionicPopup.alert({title:"dffd"})
+            console.log("begin");
+            let x=await f2();
+            console.log(x);
+            console.log("end");
+            var p= new InCarState();
+        
+        };
 
     });

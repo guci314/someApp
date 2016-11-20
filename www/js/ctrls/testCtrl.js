@@ -1,5 +1,13 @@
 ///<reference path="../../../typings/tsd.d.ts"/>
 ///<reference path="./feeCtrl.ts"/>
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments)).next());
+    });
+};
 angular.module('starter.controllers')
     .controller('TestCtrl', function ($scope, $q, $ionicLoading, $timeout, $rootScope, $ionicPopup, $http, $httpParamSerializer, $cordovaFileTransfer, RegisterService, VehicleService) {
     $scope.addTestAccount = function () {
@@ -202,6 +210,23 @@ angular.module('starter.controllers')
         //hello();
         console.log("qqqqqqqqqqq");
         //$timeout($scope.hide, 3000);
+    };
+    function f2() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield delay(3000);
+            console.log("f2 finished");
+            return "hello world";
+        });
+    }
+    $scope.test2 = function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            //$ionicPopup.alert({title:"dffd"})
+            console.log("begin");
+            let x = yield f2();
+            console.log(x);
+            console.log("end");
+            var p = new InCarState();
+        });
     };
 });
 //# sourceMappingURL=testCtrl.js.map
