@@ -6,6 +6,7 @@ interface IFeeScope extends ng.IScope {
 	cars: any;
 	CommitOutCar: any;
 	test: any;
+	getOutCars:any;
 };
 
 
@@ -19,7 +20,7 @@ angular.module('starter.controllers')
 
 		var showLoading = function () {
 			$ionicLoading.show({
-				template: '<p>正在取车,请稍候...</p><ion-spinner></ion-spinner>',
+				template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
 				duration: 100000
 			});
 		};
@@ -27,55 +28,50 @@ angular.module('starter.controllers')
 			$ionicLoading.hide();
 		};
 
-		var checkCarStatus = async () => {
-			this.stopQuery = false;
-			$timeout(() => { this.stopQuery = true; }, 3000);
-			while (!this.stopQuery) {
-				this.queryResult = await ParkingService.GetOutCar(this.phone, this.plateNo);
-				console.log(this.queryResult);
-				if ((this.queryResult.oKFlag === 2) || (this.queryResult.oKFlag === 9)) {
+		var checkCarStatus = async (phone:string, plateNo:string):Promise<number> => {
+			var stopQuery = false;
+			var queryResult:any
+			$timeout(() => { stopQuery = true; }, 20000);
+			while (!stopQuery) {
+				queryResult = await ParkingService.GetOutCar(phone, plateNo);
+				console.log(queryResult);
+				if ((queryResult.oKFlag === 2) || (queryResult.oKFlag === 9)) {
 					break;
 				} else {
 					await delay(1000);
 				};
 			};
+			return queryResult.oKFlag;
 		};
 
 		function delay(ms: number) {
 			return new Promise(resolve => setTimeout(resolve, ms));
 		}
 
-		this.stopQuery = false;
-		this.queryResult = null;
-		this.phone = "";
-		this.plateNo = "";
-		
 		$scope.CommitOutCar = async (aPlateNo:any) => {
 			showLoading();
 			let res = await ParkingService.CommitOutCar($rootScope.currentUser.phoneNumber, aPlateNo);
 			console.log(res);
-			this.phone=res.phone;
-			this.plateNo=res.plateNo;
-			await checkCarStatus();
+			let code=await checkCarStatus(res.phone,res.plateNo);
 			hideLoading();
-			if (this.queryResult.oKFlag === 9) {
+			if (code === 9) {
 				$ionicPopup.alert({ title: "取车成功" });
 			} else {
 				$ionicPopup.alert({ title: "取车失败" });
 			};
 		};
 
-		this.queryFee = async function () {
+		$scope.getOutCars = async function () {
 
 			try {
 				if ($rootScope.isLogin) {
+					showLoading();
 					$scope.cars = await ParkingService.GetOutCars($rootScope.currentUser.phoneNumber);
 					$scope.$apply();
 				} else {
 					$ionicPopup.alert({
 						title: "取车前请先登录或者注册"
 					});
-
 					$state.go("tab.account");
 					//$ionicPopup.alert({title:"ok"});
 				}
@@ -83,10 +79,12 @@ angular.module('starter.controllers')
 				$ionicPopup.alert({
 					title: err
 				});
+			}finally{
+                hideLoading();
 			};
 
 		};
 
-		this.queryFee();
+		$scope.getOutCars();
 
 	});

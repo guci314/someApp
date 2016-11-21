@@ -1,29 +1,43 @@
 ///<reference path="../../../typings/tsd.d.ts"/>
 ///<reference path="./feeCtrl.ts"/>
 
+interface MyScope extends ng.IScope {
+    addTestAccount: any;
+    test: any;
+    addVehicle: any;
+    security: any;
+    test1: any;
+    myValue: any;
+    promiseTest: any;
+    show: any;
+    hide: any;
+    loading: any;
+    test2: any;
+}
+
 angular.module('starter.controllers')
-    
+
     .controller('TestCtrl',
-    function ($scope, $q:ng.IQService, $ionicLoading, $timeout, $rootScope, $ionicPopup:ionic.popup.IonicPopupService, $http, $httpParamSerializer, $cordovaFileTransfer, RegisterService, VehicleService) {
+    function ($scope: MyScope, $q: ng.IQService, $ionicLoading: ionic.loading.IonicLoadingService, $timeout: ng.ITimeoutService, $rootScope: any, $ionicPopup: ionic.popup.IonicPopupService, $http: ng.IHttpService, $httpParamSerializer: ng.IHttpParamSerializer, $cordovaFileTransfer: any, RegisterService: any, VehicleService: any) {
 
         $scope.addTestAccount = function () {
-            var handleResponse = function (data:any) {
+            var handleResponse = function (data: any) {
                 var alertPopup = $ionicPopup.alert({
                     title: '完成'
                 });
             };
- 
+
             var phoneNumber = '18674048896';
             var validCode = '111';
             var password = '11111';
 
-            
-            
-            
+
+
+
             var p = RegisterService.register(phoneNumber, validCode, password);
-            p.then(function (res:any) {
+            p.then(function (res: any) {
                 var p1 = RegisterService.changeUserName(phoneNumber, 'testUser');
-                p1.then(function (res1:any) {
+                p1.then(function (res1: any) {
                     // VehicleService.bindPlate('18674048896', 'aaa', true).then(function(res) {
                     //     VehicleService.bindPlate('18674048896', 'bbb', true).then(function(res) {
                     //         VehicleService.bindPlate('18674048896', 'c', false).then(function(res) {
@@ -37,11 +51,11 @@ angular.module('starter.controllers')
                     VehicleService.bindPlate('18674048896', 'c', false);
                 });
             });
-            
+
         };
 
         $scope.test = function () {
-            RegisterService.getUserByPhoneNumber('18674048896').then(function (res:any) {
+            RegisterService.getUserByPhoneNumber('18674048896').then(function (res: any) {
                 $ionicPopup.alert({
                     title: JSON.stringify(res)
                 });
@@ -72,7 +86,7 @@ angular.module('starter.controllers')
                     username: "18674048895",
                     password: "11111"
                 })
-            }).then(function (res:any) {
+            }).then(function (res: any) {
                 console.log(res);
             });
         };
@@ -118,7 +132,7 @@ angular.module('starter.controllers')
 
         $scope.myValue = 0;
 
-        function addOne(x:any) {
+        function addOne(x: any) {
             var defer = $q.defer();
             $timeout(() => {
                 defer.resolve(x + 1)
@@ -126,9 +140,9 @@ angular.module('starter.controllers')
             return defer.promise;
         }
 
-        function step1(v:any) {
+        function step1(v: any) {
             var defer = $q.defer();
-            
+
             $scope.myValue = v;
             console.log("step1");
             if (v) {
@@ -146,12 +160,12 @@ angular.module('starter.controllers')
         }
 
 
-        function step2(v:any) {
+        function step2(v: any) {
             //var defer = $q.defer();
             console.log("step2");
             return $ionicPopup.confirm({
                 title: "对付对付"
-            }).then((x:any) => {
+            }).then((x: any) => {
                 if (x) {
                     var y = v + 1;
                     $scope.myValue = y;
@@ -164,7 +178,7 @@ angular.module('starter.controllers')
             //return defer.promise;
         }
 
-        function step2_1(v:any) {
+        function step2_1(v: any) {
             console.log("step2_1");
             //return v;
             var defer = $q.defer();
@@ -172,7 +186,7 @@ angular.module('starter.controllers')
             return defer.promise;
         }
 
-        function step3(v:any) {
+        function step3(v: any) {
             var defer = $q.defer();
             console.log("step3");
             $timeout(() => {
@@ -183,12 +197,12 @@ angular.module('starter.controllers')
             return defer.promise;
         }
 
-        function step3_1(v:any) {
+        function step3_1(v: any) {
             console.log("step3_1");
             return v + 1000;
         }
 
-        function step4(v:any) {
+        function step4(v: any) {
             var defer = $q.defer();
             console.log("step4");
             $timeout(() => {
@@ -199,7 +213,7 @@ angular.module('starter.controllers')
             return defer.promise;
         }
 
-        function handleError(err:any) {
+        function handleError(err: any) {
             console.log("handle error");
             console.log(err);
         }
@@ -208,7 +222,7 @@ angular.module('starter.controllers')
             // addOne($scope.myValue).then((v)=>{
             //     $scope.myValue=v;
             // });
-            step1(1).then(step2).then(step2_1).then((v:any) => {
+            step1(1).then(step2).then(step2_1).then((v: any) => {
                 return v + 10
             }).then(step3).then(step3_1).then(step4).catch(handleError);
         };
@@ -217,40 +231,36 @@ angular.module('starter.controllers')
             $ionicLoading.show({
                 template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
                 duration: 10000
-            }).then(function () {
-                console.log("The loading indicator is now displayed");
             });
         };
         $scope.hide = function () {
-            $ionicLoading.hide().then(function () {
-                console.log("The loading indicator is now hidden");
-            });
+            $ionicLoading.hide();
         };
-        
+
         $scope.loading = function () {
             //$scope.show();
             //import f1 = module("");
             //hello();
-            
+
             console.log("qqqqqqqqqqq");
 
             //$timeout($scope.hide, 3000);
         }
 
-        async function f2():Promise<string>{
+        async function f2(): Promise<string> {
             await delay(3000);
             console.log("f2 finished");
             return "hello world";
         }
 
-        $scope.test2= async function (){
+        $scope.test2 = async function () {
             //$ionicPopup.alert({title:"dffd"})
             console.log("begin");
-            let x=await f2();
+            let x = await f2();
             console.log(x);
             console.log("end");
-            var p= new InCarState();
-        
+            var p = new InCarState();
+
         };
 
     });

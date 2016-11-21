@@ -8,13 +8,15 @@
 angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services', 'ngResource', 'ngCordova'])
   .constant('appConfig', {
     serverPath: 'http://183.239.167.94:8083/api/',
+    //serverPath: 'http://localhost:8081/api/',
+
     updateUrl: 'http://183.239.167.94:8082/',
-    carServicePath:'http://183.239.167.94:8084/api/'
-    // serverPath: 'http://localhost:8081/api/',
+    carServicePath: 'http://183.239.167.94:8084/api/'
+
     // updateUrl: 'http://192.168.1.110:8080/'
   })
-  .run(function($ionicPlatform,$state,$timeout, $http, $cordovaAppVersion, appConfig, $rootScope, localStorageService, $cordovaSplashscreen) {
-    $ionicPlatform.ready(function() {
+  .run(function ($ionicPlatform, $state, $ionicHistory, $location, $ionicPopup, $timeout, $http, $cordovaAppVersion, appConfig, $rootScope, localStorageService, $cordovaSplashscreen) {
+    $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       //$cordovaSplashscreen.hide();
@@ -28,7 +30,45 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         StatusBar.styleDefault();
       }
 
-      $rootScope.$watch('currentUser', function() {
+      //主页面显示退出提示框
+      $ionicPlatform.registerBackButtonAction(function (e) {
+
+        e.preventDefault();
+
+        function showConfirm() {
+          var confirmPopup = $ionicPopup.confirm({
+            title: '<strong>退出应用?</strong>',
+            template: '你确定要退出应用吗?',
+            okText: '退出',
+            cancelText: '取消'
+          });
+
+          confirmPopup.then(function (res) {
+            if (res) {
+              ionic.Platform.exitApp();
+            } else {
+              // Don't close
+            }
+          });
+        }
+
+        // Is there a page to go back to?
+        if ($location.path() == '/tab/account' || $location.path() == '/tab/fee' || $location.path() == '/tab/dash') {
+          showConfirm();
+        } else {
+          if ($ionicHistory.viewHistory().backView) {
+            $ionicHistory.viewHistory().backView.go();
+          } else {
+            // This is the last page: Show confirmation popup
+            showConfirm();
+          }
+
+          return false;
+        }
+      }, 101);
+
+
+      $rootScope.$watch('currentUser', function () {
         localStorageService.set('currentUser', $rootScope.currentUser);
       }, true);
 
@@ -37,281 +77,292 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         $rootScope.currentUser = u;
         $rootScope.isLogin = true;
       }
-      
+
       // $cordovaSplashScreen.hide();
-      
+
     })
   })
 
-.service('AuthInterceptor', function($rootScope) {
+  .service('AuthInterceptor', function ($rootScope) {
 
-  var service = this;
+    var service = this;
 
-  // Send the Authorization header with each request
-  service.request = function(config) {
-    //if (config && config.headers) {
-    if ($rootScope) {
-      if ($rootScope.currentUser) {
-        config.headers = config.headers || {};
-        var s = $rootScope.currentUser.phoneNumber + ":" + $rootScope.currentUser.password;
-        var encodedString = btoa(s);
-        //config.headers.common['Access-Control-Allow-Origin']='*';
-        //config.headers.useXDomain = true;
-        //config.headers.common = {Access-Control-Allow-Credentials: true};
-        //config.headers.common['Access-Control-Allow-Origin'] = '*';
-        config.headers.Authorization = 'Basic ' + encodedString;
-        //config.headers.Authorization = 'Basic ' + 'guci' + ':' + '123';
-        //console.log(config);
+    // Send the Authorization header with each request
+    service.request = function (config) {
+      //if (config && config.headers) {
+      if ($rootScope) {
+        if ($rootScope.currentUser) {
+          config.headers = config.headers || {};
+          var s = $rootScope.currentUser.phoneNumber + ":" + $rootScope.currentUser.password;
+          var encodedString = btoa(s);
+          //config.headers.common['Access-Control-Allow-Origin']='*';
+          //config.headers.useXDomain = true;
+          //config.headers.common = {Access-Control-Allow-Credentials: true};
+          //config.headers.common['Access-Control-Allow-Origin'] = '*';
+          config.headers.Authorization = 'Basic ' + encodedString;
+          //config.headers.Authorization = 'Basic ' + 'guci' + ':' + '123';
+          //console.log(config);
 
 
-      }
-    }
-    return config;
-  };
-
-  service.responseError = function(response) {
-    if (response.status === 401) {
-      $rootScope.$broadcast('unauthorized');
-    }
-    return response;
-  };
-  //}
-  //'':function(){}
-
-})
-
-.config(function ($httpProvider) {
-    $httpProvider.interceptors.push(function ($rootScope, $q) {
-        return {
-            request: function (config) {
-                config.timeout = 1000;
-                return config;
-            },
-            responseError: function (rejection) {
-                switch (rejection.status){
-                    case 408 :
-                        alert({title:"连接服务器超时"});
-                        break;
-                }
-                return $q.reject(rejection);
-            }
         }
+      }
+      return config;
+    };
+
+    service.responseError = function (response) {
+      if (response.status === 401) {
+        $rootScope.$broadcast('unauthorized');
+      }
+      return response;
+    };
+    //}
+    //'':function(){}
+
+  })
+
+  .config(function ($httpProvider) {
+    $httpProvider.interceptors.push(function ($rootScope, $q) {
+      return {
+        request: function (config) {
+          config.timeout = 1000;
+          return config;
+        },
+        responseError: function (rejection) {
+          switch (rejection.status) {
+            case 408:
+              alert({ title: "连接服务器超时" });
+              break;
+          }
+          return $q.reject(rejection);
+        }
+      }
     });
     $httpProvider.interceptors.push('AuthInterceptor');
-})
-
-.config(function($stateProvider,$httpProvider, $urlRouterProvider, $ionicConfigProvider) {
-
-  $ionicConfigProvider.tabs.position('bottom');
-  $ionicConfigProvider.backButton.text('');
-  $ionicConfigProvider.navBar.alignTitle('left');
-
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
-  $stateProvider
-
-  // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: '/tab',
-    abstract: true,
-    templateUrl: 'templates/tabs.html'
   })
 
+  .config(function ($stateProvider, $httpProvider, $urlRouterProvider, $ionicConfigProvider) {
+
+    $ionicConfigProvider.tabs.position('bottom');
+    $ionicConfigProvider.backButton.text('');
+    $ionicConfigProvider.navBar.alignTitle('left');
+
+    // Ionic uses AngularUI Router which uses the concept of states
+    // Learn more here: https://github.com/angular-ui/ui-router
+    // Set up the various states which the app can be in.
+    // Each state's controller can be found in controllers.js
+    $stateProvider
+
+      // setup an abstract state for the tabs directive
+      .state('tab', {
+        url: '/tab',
+        abstract: true,
+        templateUrl: 'templates/tabs.html'
+      })
 
 
-  // Each tab has its own nav history stack:
 
-  .state('tab.parking', {
-    url: '/dash',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/parking.html',
-        controller: 'ParkingCtrl'
-      }
-    }
-  })
+      // Each tab has its own nav history stack:
 
-  .state('tab.fee', {
-    cache: false,
-    url: '/fee',
-    views: {
-      'tab-fee': {
-        templateUrl: 'templates/tab-fee.html',
-        controller: 'FeeCtrl'
-      }
-    }
-  })
+      .state('tab.parking', {
+        url: '/dash',
+        views: {
+          'tab-dash': {
+            templateUrl: 'templates/parking.html',
+            controller: 'ParkingCtrl'
+          }
+        }
+      })
 
-  .state('tab.parkingRecord', {
-    url: '/parkingRecord',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/parkingRecord.html',
-        controller: 'ParkingRecordCtrl'
-      }
-    }
-  })
+      .state('tab.fee', {
+        cache: false,
+        url: '/fee',
+        views: {
+          'tab-fee': {
+            templateUrl: 'templates/tab-fee.html',
+            controller: 'FeeCtrl'
+          }
+        }
+      })
 
-  .state('tab.chat-detail', {
-    url: '/chats/:chatId',
-    views: {
-      'tab-fee': {
-        templateUrl: 'templates/chat-detail.html',
-        controller: 'ChatDetailCtrl'
-      }
-    }
-  })
+      .state('tab.parkingRecord', {
+        url: '/parkingRecord',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/parkingRecord.html',
+            controller: 'ParkingRecordCtrl'
+          }
+        }
+      })
 
-  .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
-      }
-    }
-  })
+      .state('tab.chat-detail', {
+        url: '/chats/:chatId',
+        views: {
+          'tab-fee': {
+            templateUrl: 'templates/chat-detail.html',
+            controller: 'ChatDetailCtrl'
+          }
+        }
+      })
 
-  .state('tab.test', {
-    url: '/test',
-    views: {
-      'tab-test': {
-        templateUrl: 'templates/tab-test.html',
-        controller: 'TestCtrl'
-      }
-    }
-  })
+      .state('tab.account', {
+        url: '/account',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/tab-account.html',
+            controller: 'AccountCtrl'
+          }
+        }
+      })
 
-  .state('tab.layouttest', {
-    url: '/test/layouttest',
-    views: {
-      'tab-test': {
-        templateUrl: 'templates/layouttest.html',
-        controller: 'TestCtrl'
-      }
-    }
-  })
+      .state('tab.test', {
+        url: '/test',
+        views: {
+          'tab-test': {
+            templateUrl: 'templates/tab-test.html',
+            controller: 'TestCtrl'
+          }
+        }
+      })
 
-  .state('tab.register', {
-    url: '/account/register',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/register.html',
-        controller: 'RegisterCtrl'
-      }
-    }
-  })
+      .state('tab.layouttest', {
+        url: '/test/layouttest',
+        views: {
+          'tab-test': {
+            templateUrl: 'templates/layouttest.html',
+            controller: 'TestCtrl'
+          }
+        }
+      })
 
-  .state('tab.licence', {
-    url: '/licence',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/licence.html'
-      }
-    }
-  })
+      .state('tab.register', {
+        url: '/account/register',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/register.html',
+            controller: 'RegisterCtrl'
+          }
+        }
+      })
 
-  .state('tab.message', {
-    url: '/message',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/message.html',
-        controller: 'MessageCtrl'
-      }
-    }
-  })
+      .state('tab.licence', {
+        url: '/licence',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/licence.html'
+          }
+        }
+      })
 
-  .state('tab.message-detail', {
-    url: '/message/:messageId',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/message-detail.html',
-        controller: 'MessageDetailCtrl'
-      }
-    }
-  })
+      .state('tab.message', {
+        url: '/message',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/message.html',
+            controller: 'MessageCtrl'
+          }
+        }
+      })
+
+      .state('tab.message-detail', {
+        url: '/message/:messageId',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/message-detail.html',
+            controller: 'MessageDetailCtrl'
+          }
+        }
+      })
 
 
-  .state('tab.login', {
-    url: '/account/login',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/login.html',
-        controller: 'LoginCtrl'
-      }
-    }
-  })
+      .state('tab.login', {
+        url: '/account/login',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/login.html',
+            controller: 'LoginCtrl'
+          }
+        }
+      })
 
-  .state('tab.account-detail', {
-    url: '/account/account-detail',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/account-detail.html',
-        controller: 'Account-detailCtrl'
-      }
-    }
-  })
+      .state('tab.account-detail', {
+        url: '/account/account-detail',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/account-detail.html',
+            controller: 'Account-detailCtrl'
+          }
+        }
+      })
 
-  .state('tab.changePassword', {
-    url: '/account/changePassword',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/changePassword.html',
-        controller: 'ChangePasswordCtrl'
-      }
-    }
-  })
+      .state('tab.changePassword', {
+        url: '/account/changePassword',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/changePassword.html',
+            controller: 'ChangePasswordCtrl'
+          }
+        }
+      })
 
-  .state('tab.bindVehicle', {
-    url: '/account/bindVehicle',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/bindVehicle.html',
-        controller: 'BindVehicleCtrl'
-      }
-    }
-  })
+      .state('tab.bindVehicle', {
+        url: '/account/bindVehicle',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/bindVehicle.html',
+            controller: 'BindVehicleCtrl'
+          }
+        }
+      })
 
-  .state('tab.wallet', {
-    url: '/account/wallet',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/wallet.html',
-        controller: 'WalletCtrl'
-      }
-    }
-  })
+      .state('tab.wallet', {
+        url: '/account/wallet',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/wallet.html',
+            controller: 'WalletCtrl'
+          }
+        }
+      })
 
-  .state('tab.walletDetail', {
-    url: '/account/walletDetail',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/walletDetail.html'
-      }
-    }
-  })
+      .state('tab.walletDetail', {
+        url: '/account/walletDetail',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/walletDetail.html'
+          }
+        }
+      })
 
-  .state('tab.aboutus', {
-    url: '/aboutus',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/aboutus.html',
-        controller:'AboutusCtrl'
-      }
-    }
+      .state('tab.resetPassword', {
+        url: '/account/resetPassword',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/resetPassword.html',
+            controller: 'ResetPasswordCtrl',
+            controllerAs: 'ctrl'
+          }
+        }
+      })
+
+      .state('tab.aboutus', {
+        url: '/aboutus',
+        views: {
+          'tab-account': {
+            templateUrl: 'templates/aboutus.html',
+            controller: 'AboutusCtrl'
+          }
+        }
+      });
+
+
+
+    //                    .state('tab.register', {
+    //                        url: '/account/register',
+    //                        templateUrl: 'templates/register.html',
+    //                        //controller: 'TestCtrl'
+    //                        }
+    //                    );
+
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/tab/account');
   });
-
-
-
-  //                    .state('tab.register', {
-  //                        url: '/account/register',
-  //                        templateUrl: 'templates/register.html',
-  //                        //controller: 'TestCtrl'
-  //                        }
-  //                    );
-
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/account');
-});

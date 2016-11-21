@@ -15,20 +15,21 @@ angular.module('starter.controllers')
     .controller('FeeCtrl', function ($scope, $q, $timeout, $ionicLoading, $rootScope, $state, $ionicPopup, ParkingService) {
     var showLoading = function () {
         $ionicLoading.show({
-            template: '<p>正在取车,请稍候...</p><ion-spinner></ion-spinner>',
+            template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
             duration: 100000
         });
     };
     var hideLoading = function () {
         $ionicLoading.hide();
     };
-    var checkCarStatus = () => __awaiter(this, void 0, void 0, function* () {
-        this.stopQuery = false;
-        $timeout(() => { this.stopQuery = true; }, 3000);
-        while (!this.stopQuery) {
-            this.queryResult = yield ParkingService.GetOutCar(this.phone, this.plateNo);
-            console.log(this.queryResult);
-            if ((this.queryResult.oKFlag === 2) || (this.queryResult.oKFlag === 9)) {
+    var checkCarStatus = (phone, plateNo) => __awaiter(this, void 0, void 0, function* () {
+        var stopQuery = false;
+        var queryResult;
+        $timeout(() => { stopQuery = true; }, 20000);
+        while (!stopQuery) {
+            queryResult = yield ParkingService.GetOutCar(phone, plateNo);
+            console.log(queryResult);
+            if ((queryResult.oKFlag === 2) || (queryResult.oKFlag === 9)) {
                 break;
             }
             else {
@@ -37,23 +38,18 @@ angular.module('starter.controllers')
             ;
         }
         ;
+        return queryResult.oKFlag;
     });
     function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-    this.stopQuery = false;
-    this.queryResult = null;
-    this.phone = "";
-    this.plateNo = "";
     $scope.CommitOutCar = (aPlateNo) => __awaiter(this, void 0, void 0, function* () {
         showLoading();
         let res = yield ParkingService.CommitOutCar($rootScope.currentUser.phoneNumber, aPlateNo);
         console.log(res);
-        this.phone = res.phone;
-        this.plateNo = res.plateNo;
-        yield checkCarStatus();
+        let code = yield checkCarStatus(res.phone, res.plateNo);
         hideLoading();
-        if (this.queryResult.oKFlag === 9) {
+        if (code === 9) {
             $ionicPopup.alert({ title: "取车成功" });
         }
         else {
@@ -61,10 +57,11 @@ angular.module('starter.controllers')
         }
         ;
     });
-    this.queryFee = function () {
+    $scope.getOutCars = function () {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if ($rootScope.isLogin) {
+                    showLoading();
                     $scope.cars = yield ParkingService.GetOutCars($rootScope.currentUser.phoneNumber);
                     $scope.$apply();
                 }
@@ -80,9 +77,12 @@ angular.module('starter.controllers')
                     title: err
                 });
             }
+            finally {
+                hideLoading();
+            }
             ;
         });
     };
-    this.queryFee();
+    $scope.getOutCars();
 });
 //# sourceMappingURL=feeCtrl.js.map

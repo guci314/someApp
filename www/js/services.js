@@ -1,7 +1,7 @@
 var services = angular.module('starter.services', ['ngResource']);
 
 //chat service
-services.factory('Chats', function() {
+services.factory('Chats', function () {
     // Might use a resource here that returns a JSON array
 
     // Some fake testing data
@@ -33,13 +33,13 @@ services.factory('Chats', function() {
     }];
 
     return {
-        all: function() {
+        all: function () {
             return chats;
         },
-        remove: function(chat) {
+        remove: function (chat) {
             chats.splice(chats.indexOf(chat), 1);
         },
-        get: function(chatId) {
+        get: function (chatId) {
             for (var i = 0; i < chats.length; i++) {
                 if (chats[i].id === parseInt(chatId)) {
                     return chats[i];
@@ -54,7 +54,7 @@ services.factory('Chats', function() {
 //register service
 function RegisterService($http, appConfig) {
     var service = {};
-    service.register = function(phoneNumber, validCode, password) {
+    service.register = function (phoneNumber, validCode, password) {
         function handleResponse(res) {
             return res.data;
         }
@@ -63,50 +63,74 @@ function RegisterService($http, appConfig) {
             'password': password,
             'validCode': validCode
         };
-        try{
-        var p=$http.post(appConfig.serverPath + 'registerService/register', data)
-        .then(handleResponse)
-        .catch(function(err){
-            console.log("shit");
-        });
-        return p;
-        }catch(err){
+        try {
+            var p = $http.post(appConfig.serverPath + 'registerService/register', data)
+                .then(handleResponse)
+                .catch(function (err) {
+                    console.log("shit");
+                });
+            return p;
+        } catch (err) {
             console.log("catch error in register");
-          return null;  
+            return null;
         };
     };
-    service.login = function(phoneNumber, password) {
+
+    service.resetPassword = function (phoneNumber, validCode, password) {
         function handleResponse(res) {
             return res.data;
-        }　　　　　
+        }
+        data = {
+            'phoneNumber': phoneNumber,
+            'password': password,
+            'validCode': validCode
+        };
+        try {
+            var p = $http.post(appConfig.serverPath + 'registerService/resetPassword', data)
+                .then(handleResponse)
+                .catch(function (err) {
+                    console.log("重置密码发生错误");
+                    console.log(err);
+                });
+            return p;
+        } catch (err) {
+            console.log("catch error in resetPassword");
+            return null;
+        };
+    };
+
+    service.login = function (phoneNumber, password) {
+        function handleResponse(res) {
+            return res.data;
+        }
         data = {
             'phoneNumber': phoneNumber,
             'password': password
         };
         return $http.post(appConfig.serverPath + 'registerService/login', data).then(handleResponse);
     };
-    service.getUserByPhoneNumber = function(phoneNumber) {
+    service.getUserByPhoneNumber = function (phoneNumber) {
         function handleResponse(res) {
             return res.data;
         }
         return $http.get(appConfig.serverPath + 'registerService/getUserByPhoneNumber?phoneNumber=' + phoneNumber).then(handleResponse);
     };
-    service.changeUserName = function(phoneNumber, name) {
+    service.changeUserName = function (phoneNumber, name) {
 
         data = {
             'phoneNumber': phoneNumber,
             'name': name
         };
         //encodeURIComponent
-        return $http.post(appConfig.serverPath + 'registerService/changeUserName', data).success(function(res) {
-                return res.data;
-            })
-            .error(function(err) {
+        return $http.post(appConfig.serverPath + 'registerService/changeUserName', data).success(function (res) {
+            return res.data;
+        })
+            .error(function (err) {
                 console.log("修改姓名发生错误");
                 return null;
             });
     };
-    service.changePassword = function(phoneNumber, oldPassword, newPassword) {
+    service.changePassword = function (phoneNumber, oldPassword, newPassword) {
         function handleResponse(res) {
             return res.data;
         }
@@ -127,7 +151,7 @@ services.factory('RegisterService', RegisterService);
 function VehicleService($http, appConfig) {
     var service = {};
 
-    service.bindPlate = function(phoneNumber, plate, autoCharge) {
+    service.bindPlate = function (phoneNumber, plate, autoCharge) {
         function handleResponse(res) {
             return res.data;
         }
@@ -136,19 +160,19 @@ function VehicleService($http, appConfig) {
             'plate': plate,
             'autoCharge': autoCharge
         };
-        
+
         return $http.post(appConfig.serverPath + 'vehicleService/bindPlate', data).then(handleResponse);
     };
 
-    service.findVehiclesByPhoneNumber = function(phoneNumber) {
+    service.findVehiclesByPhoneNumber = function (phoneNumber) {
         function handleResponse(res) {
             return res.data;
         }
-        
+
         return $http.get(appConfig.serverPath + 'vehicleService/findVehiclesByPhoneNumber?phoneNumber=' + phoneNumber).then(handleResponse);
     };
 
-    service.deleteVehicle = function(id) {
+    service.deleteVehicle = function (id) {
         data = {
             'id': id
         };
@@ -169,7 +193,7 @@ services.factory('VehicleService', VehicleService);
 function WalletService($http, appConfig) {
     var service = {};
 
-    service.getBalance = function(phoneNumber) {
+    service.getBalance = function (phoneNumber) {
         data = {
             'phoneNumber': phoneNumber
         };
@@ -181,7 +205,7 @@ function WalletService($http, appConfig) {
         return $http.post(appConfig.serverPath + 'walletService/getBalance', data).then(handleResponse);
     };
 
-    service.deposit = function(phoneNumber, amount) {
+    service.deposit = function (phoneNumber, amount) {
         data = {
             'phoneNumber': phoneNumber,
             'amount': amount

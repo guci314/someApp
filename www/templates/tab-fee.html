@@ -1,6 +1,6 @@
 <ion-view view-title="计费">
     <ion-nav-buttons side="right">
-        <button class="button button-block button-positive" ng-click="queryFee()">
+        <button class="button button-block button-positive" ng-click="getOutCars()">
         <i class="fa fa-refresh fa-2x" aria-hidden="true"></i>
         </button>
     </ion-nav-buttons>
@@ -11,7 +11,7 @@
                     <div class="col-80">
                         <h2>车牌号:{{car.plateNo}}</h2>
                         <h2>车场:{{car.stockName}}</h2>
-                        <h2>车位:{{car.stockCode}}</h2>
+                        <h2>车位:{{car.binKeyCode}}</h2>
                         <h2>出入口:{{car.inOutStation}}</h2>
                         <h2>入库时间:{{car.inTime}}</h2>
                         <h2>停留时间:{{car.stayMinutes}}分钟</h2>
@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-20">
                         <!--ng-disabled="{{car.commitFlag}}" -->
-                        <button class="button button-block button-positive" ng-click="CommitOutCar(car.plateNo)">取车</button>
+                        <button class="button button-block button-positive" ng-disabled="{{car.commitFlag}}" ng-click="CommitOutCar(car.plateNo)">取车</button>
                     </div>
                 </div>
             </ion-item>

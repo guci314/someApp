@@ -17,7 +17,7 @@ angular.module('starter.controllers')
     .controller('ParkingCtrl', function ($scope, $rootScope, $timeout, $q, $state, $ionicLoading, $ionicPopup, $ionicModal, localStorageService, ParkingService) {
     var showLoading = function () {
         $ionicLoading.show({
-            template: '<p>正在停车,请稍候...</p><ion-spinner></ion-spinner>',
+            template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
             duration: 100000
         });
     };
@@ -28,7 +28,7 @@ angular.module('starter.controllers')
         return __awaiter(this, void 0, void 0, function* () {
             var stopQuery = false;
             var queryResult;
-            $timeout(() => { stopQuery = true; }, 3000);
+            $timeout(() => { stopQuery = true; }, 20000);
             while (!stopQuery) {
                 queryResult = yield ParkingService.GetInCar(phone, plateNo);
                 console.log(queryResult);
@@ -69,8 +69,10 @@ angular.module('starter.controllers')
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if ($rootScope.isLogin) {
+                    showLoading();
                     $scope.cars = yield ParkingService.GetInCars($rootScope.currentUser.phoneNumber);
                     $scope.$apply();
+                    hideLoading();
                 }
                 else {
                     $ionicPopup.alert({

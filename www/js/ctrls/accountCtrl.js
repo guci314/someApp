@@ -73,7 +73,7 @@ angular.module('starter.controllers')
                 };
 
                 var download = function () {
-                    $scope.url = appConfig.updateUrl + "android-armv7-debug.apk";
+                    $scope.url = appConfig.updateUrl + "szwchyCar.apk";
                     var filename = $scope.url.split("/").pop();
                     //externalDataDirectory documentsDirectory .cacheDirectory applicationStorageDirectory externalRootDirectory + 'Pictures/' dataDirectory applicationDirectory
                     $scope.targetPath = null;
@@ -152,24 +152,6 @@ angular.module('starter.controllers')
             }).then(function(res){
                 if (res) ionic.Platform.exitApp();
             });
-        };
-
-        $scope.test = function () {
-            function Cat() {
-                this.name = "大毛";
-                this.age=23;
-            }
-
-            var cat1=new Cat();
-            var cat1=angular.extend(cat1,{name:"dfdf",age:55});
-            
-
-            // var Cat = {
-            //     name: "大毛",
-            //     makeSound: function () { alert("喵喵喵"); }
-            // };
-            // var cat1 = Object.create(Cat);
-            // cat1.name="dfdf";
         };
 
     });

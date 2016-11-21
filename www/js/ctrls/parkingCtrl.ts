@@ -32,7 +32,7 @@ angular.module('starter.controllers')
 
 		var showLoading = function () {
 			$ionicLoading.show({
-				template: '<p>正在停车,请稍候...</p><ion-spinner></ion-spinner>',
+				template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
 				duration: 100000
 			});
 		};
@@ -43,7 +43,7 @@ angular.module('starter.controllers')
 		async function checkCarStatus(phone:string,plateNo:string):Promise<number>{
 			var stopQuery = false;
 			var queryResult:InCarState;
-			$timeout(() => { stopQuery = true; }, 3000);
+			$timeout(() => { stopQuery = true; }, 20000);
 			while (!stopQuery) {
 				queryResult = await ParkingService.GetInCar(phone, plateNo);
 				console.log(queryResult);
@@ -82,8 +82,10 @@ angular.module('starter.controllers')
 		$scope.GetInCars = async function () {
 			try {
 				if ($rootScope.isLogin) {
+					showLoading();
 					$scope.cars = await ParkingService.GetInCars($rootScope.currentUser.phoneNumber);
 					$scope.$apply();
+					hideLoading();
 				} else {
 					$ionicPopup.alert({
 						title: "停车前请先登录或者注册"

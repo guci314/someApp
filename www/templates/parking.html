@@ -14,11 +14,11 @@
                         <h2>车牌号:{{car.plateNo}}</h2>
                         <h2>时间:{{car.inTime}}</h2>
                         <h2>出入口:{{car.inOutStation}}</h2>
-                        <h2>车位:{{car.binCode}}</h2>
+                        <h2>车位:{{car.binKeyCode}}</h2>
                     </div>
                     <div class="col-20">
                         <!--ng-disabled="{{car.commitFlag}}" -->
-                        <button class="button button-block button-positive"  ng-click="CommitInCar(car.plateNo)">存车</button>
+                        <button class="button button-block button-positive" ng-disabled="{{car.commitFlag}}" ng-click="CommitInCar(car.plateNo)">存车</button>
                     </div>
                 </div>
                 <!--<button ng-click="queryStatus(car.phone,car.plateNo)">查询状态</button>-->

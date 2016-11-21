@@ -195,14 +195,10 @@ angular.module('starter.controllers')
         $ionicLoading.show({
             template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
             duration: 10000
-        }).then(function () {
-            console.log("The loading indicator is now displayed");
         });
     };
     $scope.hide = function () {
-        $ionicLoading.hide().then(function () {
-            console.log("The loading indicator is now hidden");
-        });
+        $ionicLoading.hide();
     };
     $scope.loading = function () {
         //$scope.show();
