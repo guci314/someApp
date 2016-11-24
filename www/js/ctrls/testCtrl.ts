@@ -248,7 +248,7 @@ angular.module('starter.controllers')
         }
 
         async function f2(): Promise<string> {
-            await delay(3000);
+            //await delay(3000);
             console.log("f2 finished");
             return "hello world";
         }

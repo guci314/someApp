@@ -11,10 +11,8 @@ class User {
 class Vehicle {
 }
 class ResetPasswordController {
-    //static $inject = ["$rootScope","$ionicPopup","$state","RegisterService"];
     constructor($rootScope, $ionicPopup, $state, RegisterService) {
         this.openEye = true;
-        //console.log("ResetPasswordController constructor is called");
         this.$rootScope = $rootScope;
         this.$ionicPopup = $ionicPopup;
         this.$state = $state;
@@ -50,7 +48,6 @@ class ResetPasswordController {
                             'password': this.password
                         };
                         let user = yield this.RegisterService.getUserByPhoneNumber(this.phoneNumber);
-                        //console.log(user);
                         this.$rootScope.currentUser = user;
                         this.$rootScope.isLogin = true;
                         this.$state.go('tab.account');
@@ -68,72 +65,4 @@ class ResetPasswordController {
 }
 angular.module('starter.controllers')
     .controller('ResetPasswordCtrl', ResetPasswordController);
-// angular.module('starter.controllers')
-//     .controller('ResetPasswordCtrl',
-//     function ($scope: any, $rootScope: any, $ionicPopup: ionic.popup.IonicPopupService, $state: ng.ui.IStateService, RegisterService: any) {
-//         $scope.sendData = {
-//             phoneNumber: '',
-//             valideCode: '',
-//             password: ''
-//         };
-//         $scope.openEye = true;
-//         var passwordField = angular.element(document.querySelector('#password'));
-//         $scope.showPassword = function () {
-//             if ($scope.openEye) {
-//                 $scope.openEye = false;
-//                 passwordField.attr('type', 'text');
-//             } else {
-//                 $scope.openEye = true;
-//                 passwordField.attr('type', 'password');
-//             }
-//         };
-//         $scope.getAuthcode = function () {
-//             $ionicPopup.alert({
-//                 title: '验证码已发送,十分钟后失效'
-//             });
-//         };
-//         $scope.resetPassword = function () {
-//             var handleResponse = function (data: number) {
-//                 switch (data) {
-//                     case 1:
-//                         {
-//                             var alertPopup = $ionicPopup.alert({
-//                                 title: '重置密码成功'
-//                             });
-//                             var saveUser = function (user: any) {
-//                                 $rootScope.currentUser = user;
-//                                 $rootScope.isLogin = true;
-//                                 //console.log(user.phoneNumber);
-//                             };
-//                             $rootScope.currentUser = {
-//                                 'phoneNumber': $scope.sendData.phoneNumber,
-//                                 'password': $scope.sendData.password
-//                             }
-//                             RegisterService.getUserByPhoneNumber($scope.sendData.phoneNumber)
-//                                 .then(saveUser)
-//                                 .then(function () {
-//                                     $state.go('tab.account');
-//                                     //$ionicHistory.clearHistory();
-//                                 });
-//                             break;
-//                         }
-//                     case 2:
-//                         $ionicPopup.alert({ title: "电话号码不存在" });
-//                         break;
-//                     case 3:
-//                         $ionicPopup.alert({ title: "验证码错误" });
-//                         break;
-//                 }
-//             };
-//             var handleError = (err: any) => {
-//                 $ionicPopup.alert({
-//                     title: '重置密码发生错误'
-//                 });
-//                 console.log(JSON.stringify(err));
-//             };
-//             RegisterService.resetPassword($scope.sendData.phoneNumber, $scope.sendData.validCode, $scope.sendData.password)
-//                 .then(handleResponse)
-//                 .catch(handleError);
-//         };
-//     }) 
 //# sourceMappingURL=resetPasswordCtrl.js.map

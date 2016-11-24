@@ -27,3 +27,4 @@
 /// <reference path="cordova-ionic/plugins/keyboard.d.ts" />
 /// <reference path="angular-ui-router/angular-ui-router.d.ts" />
 /// <reference path="angular-local-storage/angular-local-storage.d.ts" />
+/// <reference path="jasmine/jasmine.d.ts" />

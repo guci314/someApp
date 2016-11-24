@@ -8,12 +8,10 @@
         "target":"es6"
     },
     "files": [
-        "www/js/ctrls/feeCtrl.ts",
-        "www/js/ctrls/testCtrl.ts",
-        "typings/tsd.d.ts"
+        
     ],
     "include": [
-        "typings/**/*",
-        "www/js/**/*"
+        "www/js/**/*.ts",
+        "www/test/*.ts"
     ]
 }

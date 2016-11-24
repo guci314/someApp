@@ -1,4 +1,3 @@
-///<reference path="../../../typings/tsd.d.ts" />
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -7,82 +6,83 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-;
-function hello() {
-    console.log("hello world");
-}
-angular.module('starter.controllers')
-    .controller('FeeCtrl', function ($scope, $q, $timeout, $ionicLoading, $rootScope, $state, $ionicPopup, ParkingService) {
-    var showLoading = function () {
-        $ionicLoading.show({
+class PickupController {
+    constructor($rootScope, $ionicPopup, $state, $timeout, $ionicLoading, ParkingService) {
+        this.$rootScope = $rootScope;
+        this.$ionicPopup = $ionicPopup;
+        this.$state = $state;
+        this.ParkingService = ParkingService;
+        this.$timeout = $timeout;
+        this.$ionicLoading = $ionicLoading;
+        this.getOutCars();
+    }
+    showLoading() {
+        this.$ionicLoading.show({
             template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
             duration: 100000
         });
-    };
-    var hideLoading = function () {
-        $ionicLoading.hide();
-    };
-    var checkCarStatus = (phone, plateNo) => __awaiter(this, void 0, void 0, function* () {
-        var stopQuery = false;
-        var queryResult;
-        $timeout(() => { stopQuery = true; }, 20000);
-        while (!stopQuery) {
-            queryResult = yield ParkingService.GetOutCar(phone, plateNo);
-            console.log(queryResult);
-            if ((queryResult.oKFlag === 2) || (queryResult.oKFlag === 9)) {
-                break;
+    }
+    ;
+    hideLoading() {
+        this.$ionicLoading.hide();
+    }
+    ;
+    CommitOutCar(aStockCode, aPlateNo) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.showLoading();
+            let res = yield this.ParkingService.CommitOutCar(aStockCode, aPlateNo);
+            console.log(res);
+            let code = yield this.ParkingService.checkOutCarStatus(aStockCode, aPlateNo);
+            this.getOutCars();
+            this.hideLoading();
+            if (code === 9) {
+                this.$ionicPopup.alert({ title: "取车成功" });
             }
             else {
-                yield delay(1000);
+                this.$ionicPopup.alert({ title: "取车失败" });
             }
             ;
-        }
-        ;
-        return queryResult.oKFlag;
-    });
-    function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        });
     }
-    $scope.CommitOutCar = (aPlateNo) => __awaiter(this, void 0, void 0, function* () {
-        showLoading();
-        let res = yield ParkingService.CommitOutCar($rootScope.currentUser.phoneNumber, aPlateNo);
-        console.log(res);
-        let code = yield checkCarStatus(res.phone, res.plateNo);
-        hideLoading();
-        if (code === 9) {
-            $ionicPopup.alert({ title: "取车成功" });
-        }
-        else {
-            $ionicPopup.alert({ title: "取车失败" });
-        }
-        ;
-    });
-    $scope.getOutCars = function () {
+    ;
+    getOutCars() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                if ($rootScope.isLogin) {
-                    showLoading();
-                    $scope.cars = yield ParkingService.GetOutCars($rootScope.currentUser.phoneNumber);
-                    $scope.$apply();
+                if (this.$rootScope.isLogin) {
+                    this.showLoading();
+                    var plates = [];
+                    for (let v of this.$rootScope.currentUser.vehicles) {
+                        plates.push({ "aPlateNo": v.plate });
+                    }
+                    ;
+                    var cs = yield this.ParkingService.GetOutCars(plates);
+                    this.cars = cs.filter((c) => { return (c.oKFlag != CarFlag.success); });
                 }
                 else {
-                    $ionicPopup.alert({
+                    this.$ionicPopup.alert({
                         title: "取车前请先登录或者注册"
                     });
-                    $state.go("tab.account");
+                    this.$state.go("tab.account");
                 }
             }
             catch (err) {
-                $ionicPopup.alert({
+                this.$ionicPopup.alert({
                     title: err
                 });
             }
             finally {
-                hideLoading();
+                this.hideLoading();
             }
             ;
         });
-    };
-    $scope.getOutCars();
-});
+    }
+    ;
+    refresh() {
+        this.getOutCars();
+        this.$ionicPopup.alert({ title: "刷新成功" });
+    }
+    ;
+}
+angular.module('starter.controllers')
+    .controller('FeeCtrl', PickupController);
 //# sourceMappingURL=feeCtrl.js.map

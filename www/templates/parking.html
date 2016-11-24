@@ -1,13 +1,13 @@
 <ion-view view-title="停车" cache-view="false">
     <ion-nav-buttons side="right">
-        <button class="button button-block button-positive" ng-click="refresh()">
+        <button class="button button-block button-positive" ng-click="ctrl.refresh()">
         <i class="fa fa-refresh fa-2x" aria-hidden="true"></i>
         </button>
         <!--<button class="button button-block button-positive">刷新</button>-->
     </ion-nav-buttons>
     <ion-content  class="has-header">
         <ion-list>
-            <ion-item ng-repeat="car in cars">
+            <ion-item ng-repeat="car in ctrl.cars">
                 <div class="row">
                     <div class="col-80">
                         <h2>车场:{{car.stockName}}</h2>
@@ -18,94 +18,12 @@
                     </div>
                     <div class="col-20">
                         <!--ng-disabled="{{car.commitFlag}}" -->
-                        <button class="button button-block button-positive" ng-disabled="{{car.commitFlag}}" ng-click="CommitInCar(car.plateNo)">存车</button>
+                        <button class="button button-block button-positive" ng-disabled="{{car.commitFlag}}"  ng-click="ctrl.CommitInCar(car.stockCode,car.plateNo)">存车</button>
                     </div>
                 </div>
                 <!--<button ng-click="queryStatus(car.phone,car.plateNo)">查询状态</button>-->
             </ion-item>
         </ion-list>
-
-        <!--<div class="row">
-            <button class="button button-block button-positive" type="button" ng-click="requestParking()">请求存车
-            </button>
-        </div>
-        <div class="row">
-            <button class="button button-block button-positive" type="button" ng-click="requestPickup()">请求取车
-            </button>
-        </div>
-
-        <script id="templates/parkingModal.html" type="text/ng-template">
-            <ion-modal-view>
-                <ion-header-bar class="bar bar-header bar-positive">
-                    <h1 class="title">停车信息</h1>
-                </ion-header-bar>
-                <ion-content class="padding">
-                    <div class="list">
-                        <label class="item item-input">
-                            <span class="input-label">车牌号:</span>
-                            {{parkingMsg.plate}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">停车场:</span>
-                            {{parkingMsg.carPlace}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">车库:</span>
-                            {{parkingMsg.garage}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">车位:</span>
-                            {{parkingMsg.lot}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">出入口:</span>
-                            {{parkingMsg.entrance}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">时间:</span>
-                            {{parkingMsg.parkingTime}}
-                        </label>
-                        <button class="button button-full button-positive" ng-click="parkingModal.hide()">确定</button>
-                    </div>
-                </ion-content>
-            </ion-modal-view>
-        </script>
-
-        <script id="templates/pickupModal.html" type="text/ng-template">
-            <ion-modal-view>
-                <ion-header-bar class="bar bar-header bar-positive">
-                    <h1 class="title">取车信息</h1>
-                </ion-header-bar>
-                <ion-content class="padding">
-                    <div class="list">
-                        <label class="item item-input">
-                            <span class="input-label">车牌号:</span>
-                            {{pickupMsg.plate}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">停车场:</span>
-                            {{pickupMsg.carPlace}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">车库:</span>
-                            {{pickupMsg.garage}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">车位:</span>
-                            {{pickupMsg.lot}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">取车口:</span>
-                            {{pickupMsg.entrance}}
-                        </label>
-                        <label class="item item-input">
-                            <span class="input-label">取车时间:</span>
-                            {{pickupMsg.pickupTime}}
-                        </label>
-                        <button class="button button-full button-positive" ng-click="pickupModal.hide()">确定</button>
-                    </div>
-                </ion-content>
-            </ion-modal-view>
-        </script>-->
+        
     </ion-content>
 </ion-view>

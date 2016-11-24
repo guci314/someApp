@@ -1,5 +1,3 @@
-///<reference path="../../../typings/tsd.d.ts"/>
-///<reference path="./feeCtrl.ts"/>
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -23,13 +21,6 @@ angular.module('starter.controllers')
         p.then(function (res) {
             var p1 = RegisterService.changeUserName(phoneNumber, 'testUser');
             p1.then(function (res1) {
-                // VehicleService.bindPlate('18674048896', 'aaa', true).then(function(res) {
-                //     VehicleService.bindPlate('18674048896', 'bbb', true).then(function(res) {
-                //         VehicleService.bindPlate('18674048896', 'c', false).then(function(res) {
-                //             $ionicPopup.alert({title:"ok"});
-                //         });
-                //     });
-                // });
                 VehicleService.bindPlate('18674048896', 'aaa', true);
                 VehicleService.bindPlate('18674048896', 'bbb', true);
                 VehicleService.bindPlate('18674048896', 'c', false);
@@ -42,7 +33,6 @@ angular.module('starter.controllers')
                 title: JSON.stringify(res)
             });
         });
-        //$ionicPopup.alert({ title: JSON.stringify($rootScope.currentUser) });
     };
     $scope.addVehicle = function () {
     };
@@ -53,12 +43,6 @@ angular.module('starter.controllers')
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            // transformRequest: function(obj) {
-            //     var str = [];
-            //     for (var p in obj)
-            //         str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-            //     return str.join("&");
-            // },
             data: $httpParamSerializer({
                 username: "18674048895",
                 password: "11111"
@@ -67,35 +51,6 @@ angular.module('starter.controllers')
             console.log(res);
         });
     };
-    // $scope.download = function () {
-    //     ionic.Platform.ready(function () {
-    //         var url = "http://10.42.0.28:8080/android-debug.apk";
-    //         var filename = url.split("/").pop();
-    //         //documentsDirectory externalDataDirectory externalRootDirectory + 'Pictures/' dataDirectory applicationDirectory
-    //         var targetPath = cordova.file.externalDataDirectory + filename;
-    //         alert("cordova.file.externalDataDirectory:" + cordova.file.externalDataDirectory);
-    //         alert("filename:" + filename);
-    //         alert('targetPath:' + targetPath);
-    //         $cordovaFileTransfer.download(url, targetPath, {}, true).then(function (result) {
-    //             $scope.hasil = 'Save file on ' + targetPath + ' success!';
-    //             window.plugins.webintent.startActivity({
-    //                 action: window.plugins.webintent.ACTION_VIEW,
-    //                 url: targetPath,
-    //                 type: 'application/vnd.android.package-archive' //'text/plain' //'application/vnd.android.package-archive'
-    //             },
-    //                 function () { },
-    //                 function (e) {
-    //                     alert('Error launching app update');
-    //                 }
-    //             );
-    //         }, function (error) {
-    //             alert(JSON.stringify(error));
-    //             $scope.hasil = 'Error Download file';
-    //         }, function (progress) {
-    //             $scope.downloadProgress = (progress.loaded / progress.total) * 100;
-    //         });
-    //     });
-    // };
     $scope.test1 = function () {
         var x = {
             "gg": "adff",
@@ -132,7 +87,6 @@ angular.module('starter.controllers')
         return defer.promise;
     }
     function step2(v) {
-        //var defer = $q.defer();
         console.log("step2");
         return $ionicPopup.confirm({
             title: "对付对付"
@@ -146,11 +100,9 @@ angular.module('starter.controllers')
                 return 9;
             }
         });
-        //return defer.promise;
     }
     function step2_1(v) {
         console.log("step2_1");
-        //return v;
         var defer = $q.defer();
         defer.reject("error from step2_1");
         return defer.promise;
@@ -184,9 +136,6 @@ angular.module('starter.controllers')
         console.log(err);
     }
     $scope.promiseTest = function () {
-        // addOne($scope.myValue).then((v)=>{
-        //     $scope.myValue=v;
-        // });
         step1(1).then(step2).then(step2_1).then((v) => {
             return v + 10;
         }).then(step3).then(step3_1).then(step4).catch(handleError);
@@ -201,22 +150,16 @@ angular.module('starter.controllers')
         $ionicLoading.hide();
     };
     $scope.loading = function () {
-        //$scope.show();
-        //import f1 = module("");
-        //hello();
         console.log("qqqqqqqqqqq");
-        //$timeout($scope.hide, 3000);
     };
     function f2() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield delay(3000);
             console.log("f2 finished");
             return "hello world";
         });
     }
     $scope.test2 = function () {
         return __awaiter(this, void 0, void 0, function* () {
-            //$ionicPopup.alert({title:"dffd"})
             console.log("begin");
             let x = yield f2();
             console.log(x);

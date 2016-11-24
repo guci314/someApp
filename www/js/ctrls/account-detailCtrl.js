@@ -8,6 +8,7 @@ angular.module('starter.controllers')
                             if(res1){
                               saveUser=function(user){
                                 $rootScope.currentUser=user;
+                                $scope.$apply();
                               };
                               RegisterService.getUserByPhoneNumber($rootScope.currentUser.phoneNumber).then(saveUser);      
                             }else{

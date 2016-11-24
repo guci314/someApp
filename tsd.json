@@ -78,13 +78,16 @@
       "commit": "6ade7275918f6e95cfeb0fdbe6ce03b5f77ea862"
     },
     "cordova-ionic/cordova-ionic.d.ts": {
-      "commit": "f5ab2df94e1aabf0fc6d783ad01c4c4671760627"
+      "commit": "8673f56639274fdfcaa22ded996ec867a5f547df"
     },
     "cordova-ionic/plugins/keyboard.d.ts": {
-      "commit": "f5ab2df94e1aabf0fc6d783ad01c4c4671760627"
+      "commit": "8673f56639274fdfcaa22ded996ec867a5f547df"
     },
     "angular-local-storage/angular-local-storage.d.ts": {
       "commit": "6ade7275918f6e95cfeb0fdbe6ce03b5f77ea862"
+    },
+    "jasmine/jasmine.d.ts": {
+      "commit": "55978642a28584b258e511046b9fb9d09c8a80a4"
     }
   }
 }

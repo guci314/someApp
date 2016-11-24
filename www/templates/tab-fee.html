@@ -1,12 +1,12 @@
 <ion-view view-title="计费">
     <ion-nav-buttons side="right">
-        <button class="button button-block button-positive" ng-click="getOutCars()">
+        <button class="button button-block button-positive" ng-click="ctrl.refresh()">
         <i class="fa fa-refresh fa-2x" aria-hidden="true"></i>
         </button>
     </ion-nav-buttons>
     <ion-content class="has-header">
         <ion-list>
-            <ion-item ng-repeat="car in cars">
+            <ion-item ng-repeat="car in ctrl.cars">
                 <div class="row">
                     <div class="col-80">
                         <h2>车牌号:{{car.plateNo}}</h2>
@@ -19,23 +19,11 @@
                     </div>
                     <div class="col-20">
                         <!--ng-disabled="{{car.commitFlag}}" -->
-                        <button class="button button-block button-positive" ng-disabled="{{car.commitFlag}}" ng-click="CommitOutCar(car.plateNo)">取车</button>
+                        <button class="button button-block button-positive" ng-disabled="{{car.commitFlag}}" ng-click="ctrl.CommitOutCar(car.stockCode,car.plateNo)">取车</button>
                     </div>
                 </div>
             </ion-item>
         </ion-list>
 
-        <!--<ion-list>
-            <ion-item>
-                <button class="button button-block button-positive" type="button" ng-click="queryFee()">刷新
-                </button>
-            </ion-item>
-            <ion-item>
-                费用:{{entity.fee}}元
-            </ion-item>
-            <ion-item>
-                车牌号:{{entity.plate}}
-            </ion-item>
-        </ion-list>-->
     </ion-content>
 </ion-view>

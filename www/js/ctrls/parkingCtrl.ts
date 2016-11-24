@@ -1,107 +1,97 @@
 ///<reference path="../../../typings/tsd.d.ts" />
 
-class InCarState {
-	binCode: string;
-	binKeyCode: string;
-	id: number;
-	inOutStation: string;
-	inTime: string;
-	oKFlag: number;
-	phone: string;
-	plateNo: string;
-	stockCode: string;
-	stockName: string;
-	version: number;
-	commitFlag: boolean;
-}
+// interface IParkingScope extends ng.IScope {
+// 	CommitInCar: any;
+// 	refresh: any;
+// 	GetInCars: any;
+// 	cars: InCarState[];
+// };
 
-interface IParkingScope extends ng.IScope {
-	CommitInCar: any;
-	refresh: any;
-	GetInCars: any;
+
+class ParkingController {
+	private $rootScope: IParkingRootScope;
+	private $ionicPopup: ionic.popup.IonicPopupService;
+	private $state: ng.ui.IStateService;
+	private $timeout: ng.ITimeoutService;
+	private $ionicLoading: ionic.loading.IonicLoadingService
+	private ParkingService: ParkingService;
+	private $scope:ng.IScope;
+
+	constructor($scope:any,$rootScope: any, $ionicPopup: any, $state: any, $timeout: any, $ionicLoading: any, ParkingService: any) {
+		//console.log("ResetPasswordController constructor is called");
+		this.$scope=$scope;
+		this.$rootScope = $rootScope;
+		this.$ionicPopup = $ionicPopup;
+		this.$state = $state;
+		this.ParkingService = ParkingService;
+		this.$timeout = $timeout;
+		this.$ionicLoading = $ionicLoading;
+
+		this.GetInCars();
+	}
+
 	cars: InCarState[];
-};
+    //cars:any;
+	//xxx="dfdfdfdfd";
 
-function delay(ms: number) {
-	return new Promise(resolve => setTimeout(resolve, ms));
+	showLoading() {
+		this.$ionicLoading.show({
+			template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
+			duration: 100000
+		});
+	};
+	hideLoading() {
+		this.$ionicLoading.hide();
+	};
+
+	async CommitInCar(aStockCode: string, aPlateNo: string) {
+		this.showLoading();
+		await this.ParkingService.CommitInCar(aStockCode, aPlateNo);
+		//console.log(res);
+		let code = await this.ParkingService.checkInCarStatus(aStockCode, aPlateNo);
+		this.GetInCars();
+		this.hideLoading();
+		if (code === 9) {
+			this.$ionicPopup.alert({ title: "停车成功" });
+		} else {
+			this.$ionicPopup.alert({ title: "停车失败" });
+		};
+	};
+
+	refresh() {
+		this.GetInCars();
+		this.$ionicPopup.alert({ title: "刷新成功" });
+	};
+
+	async GetInCars() {
+		try {
+			if (this.$rootScope.isLogin) {
+				this.showLoading();
+				var plates:GetCarsParam[]=[];
+				for (let v of this.$rootScope.currentUser.vehicles){
+					var p=new GetCarsParam();
+					p.aPlateNo=v.plate;
+                    plates.push(p);
+				};
+				var cs = await this.ParkingService.GetInCars(plates);
+			    this.cars=cs.filter((c)=>{return (c.oKFlag != CarFlag.success)});
+				//this.$rootScope.$apply();
+				this.hideLoading();
+			} else {
+				this.$ionicPopup.alert({
+					title: "停车前请先登录或者注册"
+				});
+				this.$state.go("tab.account");
+				//$ionicPopup.alert({title:"ok"});
+			}
+		} catch (err) {
+			this.$ionicPopup.alert({
+				title: err
+			});
+		};
+	};
 }
 
 angular.module('starter.controllers')
-	.controller('ParkingCtrl',
-	function ($scope: IParkingScope, $rootScope: any, $timeout: ng.ITimeoutService, $q: ng.IQService, $state: ng.ui.IStateService, $ionicLoading: ionic.loading.IonicLoadingService, $ionicPopup: ionic.popup.IonicPopupService, $ionicModal: ionic.modal.IonicModalService, localStorageService: ng.local.storage.ILocalStorageService, ParkingService: any) {
+	.controller('ParkingCtrl', ParkingController);
 
-		var showLoading = function () {
-			$ionicLoading.show({
-				template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
-				duration: 100000
-			});
-		};
-		var hideLoading = function () {
-			$ionicLoading.hide();
-		};
-        
-		async function checkCarStatus(phone:string,plateNo:string):Promise<number>{
-			var stopQuery = false;
-			var queryResult:InCarState;
-			$timeout(() => { stopQuery = true; }, 20000);
-			while (!stopQuery) {
-				queryResult = await ParkingService.GetInCar(phone, plateNo);
-				console.log(queryResult);
-				if ((queryResult.oKFlag === 2) || (queryResult.oKFlag === 9)) {
-					break;
-				} else {
-					await delay(1000);
-				};
-			};
-			return queryResult.oKFlag;
-		};
-
-
-		$scope.CommitInCar = async (aPlateNo: string) =>{
-			showLoading();
-			let res:InCarState =await ParkingService.CommitInCar($rootScope.currentUser.phoneNumber, aPlateNo);
-			console.log(res);
-			let code=await checkCarStatus(res.phone,res.plateNo);
-			console.log("get rerult");
-			console.log(code);
-			hideLoading();
-			if (code === 9) {
-				$ionicPopup.alert({ title: "停车成功" });
-			} else {
-				$ionicPopup.alert({ title: "停车失败" });
-			};
-		};
-
-
-
-		$scope.refresh = function () {
-			$scope.GetInCars();
-			$ionicPopup.alert({ title: "刷新成功" });
-		};
-
-		$scope.GetInCars = async function () {
-			try {
-				if ($rootScope.isLogin) {
-					showLoading();
-					$scope.cars = await ParkingService.GetInCars($rootScope.currentUser.phoneNumber);
-					$scope.$apply();
-					hideLoading();
-				} else {
-					$ionicPopup.alert({
-						title: "停车前请先登录或者注册"
-					});
-					$state.go("tab.account");
-					//$ionicPopup.alert({title:"ok"});
-				}
-			} catch (err) {
-				$ionicPopup.alert({
-					title: err
-				});
-			};
-		};
-
-
-		$scope.GetInCars();
-
-
-	});

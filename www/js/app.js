@@ -8,9 +8,9 @@
 angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers', 'starter.services', 'ngResource', 'ngCordova'])
   .constant('appConfig', {
     serverPath: 'http://183.239.167.94:8083/api/',
-    //serverPath: 'http://localhost:8081/api/',
-
-    updateUrl: 'http://183.239.167.94:8082/',
+    //serverPath: 'http://localhost:8083/api/',
+    updateUrl: 'http://192.168.1.110:8080/',
+    //updateUrl: 'http://183.239.167.94:8082/',
     carServicePath: 'http://183.239.167.94:8084/api/'
 
     // updateUrl: 'http://192.168.1.110:8080/'
@@ -124,7 +124,7 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
     $httpProvider.interceptors.push(function ($rootScope, $q) {
       return {
         request: function (config) {
-          config.timeout = 1000;
+          config.timeout = 5000;
           return config;
         },
         responseError: function (rejection) {
@@ -168,7 +168,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         views: {
           'tab-dash': {
             templateUrl: 'templates/parking.html',
-            controller: 'ParkingCtrl'
+            controller: 'ParkingCtrl',
+            controllerAs: 'ctrl'
           }
         }
       })
@@ -179,7 +180,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         views: {
           'tab-fee': {
             templateUrl: 'templates/tab-fee.html',
-            controller: 'FeeCtrl'
+            controller: 'FeeCtrl',
+            controllerAs: 'ctrl'
           }
         }
       })
@@ -189,7 +191,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         views: {
           'tab-account': {
             templateUrl: 'templates/parkingRecord.html',
-            controller: 'ParkingRecordCtrl'
+            controller: 'ParkingRecordCtrl',
+            controllerAs: 'ctrl'
           }
         }
       })
@@ -309,7 +312,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         views: {
           'tab-account': {
             templateUrl: 'templates/bindVehicle.html',
-            controller: 'BindVehicleCtrl'
+            controller: 'BindVehicleCtrl',
+            controllerAs: 'ctrl'
           }
         }
       })

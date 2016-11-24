@@ -1,67 +1,65 @@
-angular.module('starter.controllers')
-    .controller('BindVehicleCtrl', function($scope, $rootScope, $state, $ionicPopup,$ionicPopover, VehicleService) {
-
-        $scope.entity = {
-            vehicleNumber: '',
-            autoCharge: true
-        };
-
-        $scope.animation = 'slide-in-up';
-
-        $ionicPopover.fromTemplateUrl('templates/popover.html', {
-            scope: $scope,
-            animation: $scope.animation
-        }).then(function(popover) {
-            $scope.popover = popover;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments)).next());
+    });
+};
+class BindVehicleController {
+    constructor($scope, $rootScope, $ionicPopup, $state, $ionicPopover, VehicleService) {
+        this.autoCharge = true;
+        this.$scope = $scope;
+        this.$rootScope = $rootScope;
+        this.$ionicPopup = $ionicPopup;
+        this.$state = $state;
+        this.$ionicPopover = $ionicPopover;
+        this.VehicleService = VehicleService;
+        this.$ionicPopover.fromTemplateUrl('templates/popover.html', {
+            scope: this.$scope
+        }).then((popover) => {
+            this.popover = popover;
         });
-
-        // VehicleService.findVehiclesByPhoneNumber($rootScope.currentUser.phoneNumber).then(handleResponse);
-
-        // function handleResponse(res) {
-        //     $scope.vehicles = res;
-        // };
-
-        $scope.delete = function(id, index) {
-            var confirm = $ionicPopup.confirm({
+    }
+    delete(id, index) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let res = yield this.$ionicPopup.confirm({
                 title: "确认删除",
                 template: "你确实要删除这个车辆吗?",
                 okText: "确定",
                 cancelText: "取消"
             });
-            confirm.then(function(res) {
-                if (res) {
-                    VehicleService.deleteVehicle(id).then(function(res) {
-                        if (res) {
-                            $rootScope.currentUser.vehicles.splice(index, 1);
-                        }
-
-                    });
+            if (res) {
+                let x = yield this.VehicleService.deleteVehicle(id);
+                if (x) {
+                    this.$rootScope.currentUser.vehicles.splice(index, 1);
+                    this.$scope.$apply();
                 }
-            });
-
-        };
-
-        $scope.bindPlate = function() {
-            for (var v in $rootScope.currentUser.vehicles) {
-                if ($rootScope.currentUser.vehicles[v].plate == $scope.entity.vehicleNumber) {
-                    $ionicPopup.alert({
-                        title: "不能重复绑定"
+            }
+        });
+    }
+    ;
+    bindPlate() {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (var v in this.$rootScope.currentUser.vehicles) {
+                if (this.$rootScope.currentUser.vehicles[v].plate == this.vehicleNumber) {
+                    this.$ionicPopup.alert({
+                        title: "不能重复绑定车牌号"
                     });
                     return;
                 }
-            };
-            VehicleService.bindPlate($rootScope.currentUser.phoneNumber, $scope.entity.vehicleNumber, $scope.entity.autoCharge).then(handleResponse, handleError);
-
-            function handleResponse(res) {
-                if (res) {
-                    $ionicPopup.alert({
-                        title: "绑定成功"
-                    });
-                    $rootScope.currentUser.vehicles.push(res);
-                }
-            };　　　　　　　 //粤B9F09C
-            function handleError(err) {
-                console.log(err);
-            };
-        }
-    });
+            }
+            ;
+            let res = yield this.VehicleService.bindPlate(this.$rootScope.currentUser.phoneNumber, this.vehicleNumber, this.autoCharge);
+            if (res) {
+                this.$ionicPopup.alert({
+                    title: "绑定成功"
+                });
+                this.$rootScope.currentUser.vehicles.push(res);
+            }
+        });
+    }
+}
+angular.module('starter.controllers')
+    .controller('BindVehicleCtrl', BindVehicleController);
+//# sourceMappingURL=bindVehicleCtrl.js.map
