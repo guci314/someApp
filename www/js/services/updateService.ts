@@ -14,7 +14,7 @@ class UpdateService {
     private $http: ng.IHttpService;
     private $cordovaAppVersion: any;
     private $cordovaFileTransfer: any;
-    private appConfig: any;
+    private appConfig: IAppConfig;
 
     constructor($rootScope:any,$ionicModal: any, $ionicPopup: any, $http: any, $cordovaAppVersion: any, $cordovaFileTransfer: any, appConfig: any) {
         this.$rootScope = $rootScope;

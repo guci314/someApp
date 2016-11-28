@@ -11,8 +11,10 @@ class User {
 class Vehicle {
 }
 class ResetPasswordController {
+    //static $inject = ["$rootScope","$ionicPopup","$state","RegisterService"];
     constructor($rootScope, $ionicPopup, $state, RegisterService) {
         this.openEye = true;
+        //console.log("ResetPasswordController constructor is called");
         this.$rootScope = $rootScope;
         this.$ionicPopup = $ionicPopup;
         this.$state = $state;
@@ -48,6 +50,7 @@ class ResetPasswordController {
                             'password': this.password
                         };
                         let user = yield this.RegisterService.getUserByPhoneNumber(this.phoneNumber);
+                        //console.log(user);
                         this.$rootScope.currentUser = user;
                         this.$rootScope.isLogin = true;
                         this.$state.go('tab.account');

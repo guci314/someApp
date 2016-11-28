@@ -72,10 +72,10 @@
       "commit": "f5ab2df94e1aabf0fc6d783ad01c4c4671760627"
     },
     "angularjs/angular.d.ts": {
-      "commit": "6ade7275918f6e95cfeb0fdbe6ce03b5f77ea862"
+      "commit": "c3daad4d0547d301ce5dad25138216fa0a30d547"
     },
     "jquery/jquery.d.ts": {
-      "commit": "6ade7275918f6e95cfeb0fdbe6ce03b5f77ea862"
+      "commit": "c3daad4d0547d301ce5dad25138216fa0a30d547"
     },
     "cordova-ionic/cordova-ionic.d.ts": {
       "commit": "8673f56639274fdfcaa22ded996ec867a5f547df"
@@ -88,6 +88,9 @@
     },
     "jasmine/jasmine.d.ts": {
       "commit": "55978642a28584b258e511046b9fb9d09c8a80a4"
+    },
+    "angular-ui-router/angular-ui-router.d.ts": {
+      "commit": "c3daad4d0547d301ce5dad25138216fa0a30d547"
     }
   }
 }

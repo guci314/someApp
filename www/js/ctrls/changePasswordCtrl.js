@@ -38,9 +38,9 @@ angular.module('starter.controllers')
                         //$rootScope.isLogin = true;
                         
                     } else {
-                        $ionicPopup.alert({
-                            title: '修改密码失败'
-                        });
+                        // $ionicPopup.alert({
+                        //     title: '修改密码失败'
+                        // });
                     }
                 }
 

@@ -1,3 +1,4 @@
+///<reference path="../../../typings/tsd.d.ts" />
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -6,8 +7,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
+/**
+ * 车牌号，作为查询参数用
+ */
 class GetCarsParam {
 }
+/**
+ * 车辆状态码
+ */
 var CarFlag;
 (function (CarFlag) {
     CarFlag[CarFlag["initial"] = 0] = "initial";
@@ -15,12 +22,14 @@ var CarFlag;
     CarFlag[CarFlag["fail"] = 2] = "fail";
     CarFlag[CarFlag["success"] = 9] = "success";
 })(CarFlag || (CarFlag = {}));
-class InCarState {
+/**
+ * 车辆状态
+ */
+class CarState {
 }
-class OutCarState extends InCarState {
-}
-class ParkingRecord extends OutCarState {
-}
+/**
+ * 车辆服务
+ */
 class ParkingService {
     constructor($http, $timeout, appConfig) {
         this.$http = $http;
@@ -28,16 +37,24 @@ class ParkingService {
         this.$timeout = $timeout;
     }
     delay(ms) {
+        //setTimeout(resolve, ms)
         return new Promise(resolve => this.$timeout(resolve, ms));
     }
+    /**
+     * 确认停车
+     */
     CommitInCar(aStockCode, aPlateNo) {
         return __awaiter(this, void 0, void 0, function* () {
             var data = { "aStockCode": aStockCode, "aPlateNo": aPlateNo };
+            //encodeURI(aPlateNo)
             let res = yield this.$http.post(this.appConfig.carServicePath + "InCarInterface/" + 'CommitInCar', data);
             return res.data;
         });
     }
     ;
+    /**
+     * 轮循20秒查询停车状态
+     */
     checkInCarStatus(aStockCode, aPlateNo) {
         return __awaiter(this, void 0, void 0, function* () {
             var stopQuery = false;
@@ -45,8 +62,8 @@ class ParkingService {
             this.$timeout(() => { stopQuery = true; }, 20000);
             while (!stopQuery) {
                 queryResult = yield this.GetInCar(aStockCode, aPlateNo);
-                console.log(queryResult);
-                if ((queryResult.oKFlag === CarFlag.fail) || (queryResult.oKFlag === CarFlag.success)) {
+                //console.log(queryResult);
+                if ((queryResult.oKFlag === CarFlag.fail) || (queryResult.oKFlag === CarFlag.success) || (queryResult.oKFlag === CarFlag.initial)) {
                     break;
                 }
                 else {
@@ -59,6 +76,9 @@ class ParkingService {
         });
     }
     ;
+    /**
+     * 轮循20秒查询取车状态
+     */
     checkOutCarStatus(aStockCode, plateNo) {
         return __awaiter(this, void 0, void 0, function* () {
             var stopQuery = false;
@@ -66,8 +86,8 @@ class ParkingService {
             this.$timeout(() => { stopQuery = true; }, 20000);
             while (!stopQuery) {
                 queryResult = yield this.GetOutCar(aStockCode, plateNo);
-                console.log(queryResult);
-                if ((queryResult.oKFlag === CarFlag.fail) || (queryResult.oKFlag === CarFlag.success)) {
+                //console.log(queryResult);
+                if ((queryResult.oKFlag === CarFlag.fail) || (queryResult.oKFlag === CarFlag.success) || (queryResult.oKFlag === CarFlag.initial)) {
                     break;
                 }
                 else {
@@ -80,13 +100,20 @@ class ParkingService {
         });
     }
     ;
+    /**
+     * 根据一组车牌号获取停车状态
+     */
     GetInCars(plates) {
         return __awaiter(this, void 0, void 0, function* () {
+            //var data ={}; //[{ "aPlateNo": aPlateN }];
             let res = yield this.$http.post(this.appConfig.carServicePath + "InCarInterface/" + 'GetInCars', plates);
             return res.data;
         });
     }
     ;
+    /**
+     * 获取停车状态
+     */
     GetInCar(aStockCode, aPlateNo) {
         return __awaiter(this, void 0, void 0, function* () {
             var data = { "aStockCode": aStockCode, "aPlateNo": aPlateNo };
@@ -95,13 +122,20 @@ class ParkingService {
         });
     }
     ;
+    /**
+     * 根据一组车牌号获取取车状态
+     */
     GetOutCars(plates) {
         return __awaiter(this, void 0, void 0, function* () {
+            //var data = {};//{ "aPhone": phoneNumber };
             let res = yield this.$http.post(this.appConfig.carServicePath + "OutCarInterface/" + 'GetOutCars', plates);
             return res.data;
         });
     }
     ;
+    /**
+     * 获取取车状态
+     */
     GetOutCar(aStockCode, aPlateNo) {
         return __awaiter(this, void 0, void 0, function* () {
             var data = { "aStockCode": aStockCode, "aPlateNo": aPlateNo };
@@ -110,6 +144,9 @@ class ParkingService {
         });
     }
     ;
+    /**
+     * 确认取车
+     */
     CommitOutCar(aStockCode, aPlateNo) {
         return __awaiter(this, void 0, void 0, function* () {
             var data = { "aStockCode": aStockCode, "aPlateNo": aPlateNo };
@@ -118,9 +155,14 @@ class ParkingService {
         });
     }
     ;
+    /**
+     * 根据一组车牌号获取停车记录
+     */
     getParkingRecords(plates) {
         return __awaiter(this, void 0, void 0, function* () {
+            //var data={};//{"aPhone":phoneNumber};
             let res = yield this.$http.post(this.appConfig.carServicePath + "InOutLogInterface/" + 'GetInOutLogByPhone', plates);
+            //console.log(res);
             return res.data;
         });
     }

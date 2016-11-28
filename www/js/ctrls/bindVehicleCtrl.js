@@ -8,13 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 class BindVehicleController {
     constructor($scope, $rootScope, $ionicPopup, $state, $ionicPopover, VehicleService) {
-        this.autoCharge = true;
+        this.autoCharge = false;
+        //console.log("ResetPasswordController constructor is called");
         this.$scope = $scope;
         this.$rootScope = $rootScope;
         this.$ionicPopup = $ionicPopup;
         this.$state = $state;
         this.$ionicPopover = $ionicPopover;
         this.VehicleService = VehicleService;
+        //$scope.animation = 'slide-in-up';
         this.$ionicPopover.fromTemplateUrl('templates/popover.html', {
             scope: this.$scope
         }).then((popover) => {
@@ -41,19 +43,40 @@ class BindVehicleController {
     ;
     bindPlate() {
         return __awaiter(this, void 0, void 0, function* () {
+            this.plate = this.plate.toUpperCase();
+            if (this.$rootScope.currentUser.vehicles.length >= 3) {
+                this.$ionicPopup.alert({
+                    title: '一个电话号码最多绑定三辆车',
+                    okText: "确定"
+                });
+                return;
+            }
+            ;
+            //let b= await this
             for (var v in this.$rootScope.currentUser.vehicles) {
-                if (this.$rootScope.currentUser.vehicles[v].plate == this.vehicleNumber) {
+                if (this.$rootScope.currentUser.vehicles[v].plate == this.plate) {
                     this.$ionicPopup.alert({
-                        title: "不能重复绑定车牌号"
+                        title: "不能重复绑定车牌号",
+                        okText: "确定"
                     });
                     return;
                 }
             }
             ;
-            let res = yield this.VehicleService.bindPlate(this.$rootScope.currentUser.phoneNumber, this.vehicleNumber, this.autoCharge);
+            let b = yield this.VehicleService.checkBindStatus(this.plate);
+            if (!b) {
+                this.$ionicPopup.alert({
+                    title: '此车辆已绑定到另一个手机号码',
+                    okText: "确定"
+                });
+                return;
+            }
+            //$timeout(()=>{VehicleService.bindPlate($rootScope.currentUser.phoneNumber, $scope.entity.vehicleNumber, $scope.entity.autoCharge).then(handleResponse, handleError);});
+            let res = yield this.VehicleService.bindPlate(this.$rootScope.currentUser.phoneNumber, this.plate, this.autoCharge);
             if (res) {
                 this.$ionicPopup.alert({
-                    title: "绑定成功"
+                    title: "绑定成功",
+                    okText: "确定"
                 });
                 this.$rootScope.currentUser.vehicles.push(res);
             }

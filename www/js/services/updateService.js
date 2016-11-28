@@ -1,3 +1,4 @@
+///<reference path="../../../typings/tsd.d.ts" />
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -9,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 class UpdateService {
     constructor($rootScope, $ionicModal, $ionicPopup, $http, $cordovaAppVersion, $cordovaFileTransfer, appConfig) {
         this.$rootScope = $rootScope;
+        //this.$ionicPlatform = $ionicPlatform;
         this.$ionicModal = $ionicModal;
         this.$ionicPopup = $ionicPopup;
         this.$http = $http;
@@ -16,8 +18,10 @@ class UpdateService {
         this.$cordovaFileTransfer = $cordovaFileTransfer;
         this.appConfig = appConfig;
     }
+    //downloadProgress: number;
     update() {
         return __awaiter(this, void 0, void 0, function* () {
+            //await this.$ionicPlatform.ready();
             let localVersion = yield this.$cordovaAppVersion.getVersionNumber();
             let v = yield this.$http.get(this.appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
                 cache: false
@@ -47,6 +51,7 @@ class UpdateService {
             var url = this.appConfig.updateUrl + "szwchyCar.apk";
             var filename = url.split("/").pop();
             var targetPath;
+            //externalDataDirectory documentsDirectory .cacheDirectory applicationStorageDirectory externalRootDirectory + 'Pictures/' dataDirectory applicationDirectory
             if (cordova.file.externalDataDirectory !== null) {
                 targetPath = cordova.file.externalDataDirectory + filename;
             }
@@ -74,7 +79,7 @@ class UpdateService {
             plugin.webintent.startActivity({
                 action: plugin.webintent.ACTION_VIEW,
                 url: targetPath,
-                type: 'application/vnd.android.package-archive'
+                type: 'application/vnd.android.package-archive' //'text/plain' //'application/vnd.android.package-archive'
             }, () => { }, (e) => {
                 this.$ionicPopup.alert({ title: "安装程序发生错误" });
             });

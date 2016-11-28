@@ -9,8 +9,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
   .constant('appConfig', {
     serverPath: 'http://183.239.167.94:8083/api/',
     //serverPath: 'http://localhost:8083/api/',
-    updateUrl: 'http://192.168.1.110:8080/',
-    //updateUrl: 'http://183.239.167.94:8082/',
+    //updateUrl: 'http://192.168.1.110:8080/',
+    updateUrl: 'http://183.239.167.94:8082/',
     carServicePath: 'http://183.239.167.94:8084/api/'
 
     // updateUrl: 'http://192.168.1.110:8080/'
@@ -66,7 +66,10 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
           return false;
         }
       }, 101);
-
+      
+      $rootScope.$on('networkError',function(event,data){
+        $ionicPopup.alert({title:data});
+      });
 
       $rootScope.$watch('currentUser', function () {
         localStorageService.set('currentUser', $rootScope.currentUser);
@@ -102,17 +105,16 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
           config.headers.Authorization = 'Basic ' + encodedString;
           //config.headers.Authorization = 'Basic ' + 'guci' + ':' + '123';
           //console.log(config);
-
-
         }
       }
       return config;
     };
 
     service.responseError = function (response) {
-      if (response.status === 401) {
-        $rootScope.$broadcast('unauthorized');
-      }
+      // if (response.status === 401) {
+      //   $rootScope.$broadcast('unauthorized');
+      // }
+      $rootScope.$broadcast("networkError", "网络错误");
       return response;
     };
     //}
@@ -242,7 +244,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         views: {
           'tab-account': {
             templateUrl: 'templates/register.html',
-            controller: 'RegisterCtrl'
+            controller: 'RegisterCtrl',
+            controllerAs: 'ctrl'
           }
         }
       })
@@ -282,7 +285,8 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
         views: {
           'tab-account': {
             templateUrl: 'templates/login.html',
-            controller: 'LoginCtrl'
+            controller: 'LoginCtrl',
+            controllerAs: 'ctrl'
           }
         }
       })
@@ -308,9 +312,31 @@ angular.module('starter', ['ionic', 'LocalStorageModule', 'starter.controllers',
       })
 
       .state('tab.bindVehicle', {
-        url: '/account/bindVehicle',
+        url: '/account/bindVehicle', 
         views: {
           'tab-account': {
+            templateUrl: 'templates/bindVehicle.html',
+            controller: 'BindVehicleCtrl',
+            controllerAs: 'ctrl'
+          }
+        }
+      })
+
+      .state('tab.bindVehicle_fee', {
+        url: '/fee_bindVehicle', 
+        views: {
+          'tab-fee': {
+            templateUrl: 'templates/bindVehicle.html',
+            controller: 'BindVehicleCtrl',
+            controllerAs: 'ctrl'
+          }
+        }
+      })
+
+      .state('tab.bindVehicle_dash', {
+        url: '/dash_bindVehicle', 
+        views: {
+          'tab-dash': {
             templateUrl: 'templates/bindVehicle.html',
             controller: 'BindVehicleCtrl',
             controllerAs: 'ctrl'

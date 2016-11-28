@@ -1,3 +1,4 @@
+///<reference path="../../../typings/tsd.d.ts" />
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -6,8 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
+// interface IParkingScope extends ng.IScope {
+// 	CommitInCar: any;
+// 	refresh: any;
+// 	GetInCars: any;
+// 	cars: InCarState[];
+// };
 class ParkingController {
     constructor($scope, $rootScope, $ionicPopup, $state, $timeout, $ionicLoading, ParkingService) {
+        this.userIsCommiting = false;
+        //console.log("ResetPasswordController constructor is called");
         this.$scope = $scope;
         this.$rootScope = $rootScope;
         this.$ionicPopup = $ionicPopup;
@@ -15,12 +24,30 @@ class ParkingController {
         this.ParkingService = ParkingService;
         this.$timeout = $timeout;
         this.$ionicLoading = $ionicLoading;
+        if (!this.$rootScope.isLogin) {
+            this.$state.go('tab.login');
+            return;
+        }
+        ;
+        if (this.$rootScope.currentUser.vehicles.length === 0) {
+            this.$state.go('tab.bindVehicle_dash');
+            return;
+        }
+        ;
+        this.plates = [];
+        for (let v of this.$rootScope.currentUser.vehicles) {
+            var p = new GetCarsParam();
+            p.aPlateNo = v.plate;
+            this.plates.push(p);
+        }
+        ;
         this.GetInCars();
+        this.loopRefresh();
     }
     showLoading() {
         this.$ionicLoading.show({
             template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
-            duration: 100000
+            duration: 30000
         });
     }
     ;
@@ -28,20 +55,40 @@ class ParkingController {
         this.$ionicLoading.hide();
     }
     ;
+    loopRefresh() {
+        return __awaiter(this, void 0, void 0, function* () {
+            while (true) {
+                //console.log(this.$state.current.name);
+                if (this.$state.current.name !== 'tab.parking')
+                    break;
+                if (!this.userIsCommiting) {
+                    var cs = yield this.ParkingService.GetInCars(this.plates);
+                    if (cs === null)
+                        break;
+                    this.cars = cs.filter((c) => { return (c.oKFlag != CarFlag.success); });
+                }
+                yield this.ParkingService.delay(1000);
+            }
+            ;
+        });
+    }
     CommitInCar(aStockCode, aPlateNo) {
         return __awaiter(this, void 0, void 0, function* () {
+            this.userIsCommiting = true;
             this.showLoading();
             yield this.ParkingService.CommitInCar(aStockCode, aPlateNo);
+            //console.log(res);
             let code = yield this.ParkingService.checkInCarStatus(aStockCode, aPlateNo);
             this.GetInCars();
             this.hideLoading();
-            if (code === 9) {
+            if (code === CarFlag.success) {
                 this.$ionicPopup.alert({ title: "停车成功" });
             }
             else {
                 this.$ionicPopup.alert({ title: "停车失败" });
             }
             ;
+            this.userIsCommiting = false;
         });
     }
     ;
@@ -55,16 +102,10 @@ class ParkingController {
             try {
                 if (this.$rootScope.isLogin) {
                     this.showLoading();
-                    var plates = [];
-                    for (let v of this.$rootScope.currentUser.vehicles) {
-                        var p = new GetCarsParam();
-                        p.aPlateNo = v.plate;
-                        plates.push(p);
+                    var cs = yield this.ParkingService.GetInCars(this.plates);
+                    if (cs !== null) {
+                        this.cars = cs.filter((c) => { return (c.oKFlag != CarFlag.success); });
                     }
-                    ;
-                    var cs = yield this.ParkingService.GetInCars(plates);
-                    this.cars = cs.filter((c) => { return (c.oKFlag != CarFlag.success); });
-                    this.hideLoading();
                 }
                 else {
                     this.$ionicPopup.alert({
@@ -74,9 +115,9 @@ class ParkingController {
                 }
             }
             catch (err) {
-                this.$ionicPopup.alert({
-                    title: err
-                });
+            }
+            finally {
+                this.hideLoading();
             }
             ;
         });

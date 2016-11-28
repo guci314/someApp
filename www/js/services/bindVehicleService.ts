@@ -1,6 +1,6 @@
 class VehicleService{
     private $http: ng.IHttpService;
-    private appConfig: any;
+    private appConfig: IAppConfig;
 
     constructor($http: ng.IHttpService, appConfig: any) {
         this.$http = $http;
@@ -31,6 +31,15 @@ class VehicleService{
         let res=await this.$http.post(this.appConfig.serverPath + 'vehicleService/deleteVehicle', data);
         return res.data as boolean;
     };
+
+    async checkBindStatus(plate:string):Promise<boolean>{
+        var data = {
+            'plate': plate
+        };
+
+        let res=await this.$http.post(this.appConfig.serverPath + 'vehicleService/checkBindStatus', data);
+        return res.data as boolean;
+    }
 }
 
 angular.module('starter.services').service('VehicleService', VehicleService);

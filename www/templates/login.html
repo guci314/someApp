@@ -5,7 +5,7 @@
                 <div class="item item-icon-left">
                     <i class="icon ion-iphone"></i>
                     <span class="item-input">
-                        <input type="tel" name="phone" placeholder="电话号码" ng-model="entity.phoneNumber" ng-pattern="/^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/i" required>
+                        <input type="tel" name="phone" placeholder="电话号码" ng-model="ctrl.phoneNumber" ng-pattern="/^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/i" required>
                     </span>
                 </div>
                 <span style="color:red" ng-show="myForm.phone.$dirty && myForm.phone.$invalid">
@@ -15,11 +15,11 @@
                 <div class="item item-icon-left">
                     <i class="icon ion-ios-locked"></i>
                     <span class="item-input">
-                        <input type="password" id="password" name="password" placeholder="密码" ng-model="entity.password" ng-minlength="5" ng-maxlength="20" required>
+                        <input type="password" id="password" name="password" placeholder="密码" ng-model="ctrl.password" ng-minlength="5" ng-maxlength="20" required>
                         <!-- <label for="password">aaaa</label> -->
-                        <a href="" ng-click="showPassword()" class="show-password">
-                        <i class="fa fa-eye" id="openEye" ng-show="openEye" aria-hidden="true"></i>
-                        <i class="fa fa-eye-slash" id="closeEye" ng-hide="openEye" aria-hidden="true"></i>
+                        <a href="" ng-click="ctrl.showPassword()" class="show-password">
+                        <i class="fa fa-eye" id="openEye" ng-show="ctrl.openEye" aria-hidden="true"></i>
+                        <i class="fa fa-eye-slash" id="closeEye" ng-hide="ctrl.openEye" aria-hidden="true"></i>
                         </a>
                     </span>
                     
@@ -31,7 +31,7 @@
             </div>
         </form>
         <div class="row">
-            <button class="button button-block button-positive" type="button" ng-disabled="myForm.$invalid" ng-click="login()">登录
+            <button class="button button-block button-positive" type="button" ng-disabled="myForm.$invalid" ng-click="ctrl.login()">登录
             </button>
         </div>
         <div class="row padding">

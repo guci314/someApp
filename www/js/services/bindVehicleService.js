@@ -40,6 +40,15 @@ class VehicleService {
         });
     }
     ;
+    checkBindStatus(plate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var data = {
+                'plate': plate
+            };
+            let res = yield this.$http.post(this.appConfig.serverPath + 'vehicleService/checkBindStatus', data);
+            return res.data;
+        });
+    }
 }
 angular.module('starter.services').service('VehicleService', VehicleService);
 //# sourceMappingURL=bindVehicleService.js.map

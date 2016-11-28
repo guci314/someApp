@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 class ParkingRecordController {
     constructor($scope, $rootScope, $ionicPopup, $ionicLoading, ParkingService) {
+        //console.log("ResetPasswordController constructor is called");
         this.$scope = $scope;
         this.$rootScope = $rootScope;
         this.$ionicPopup = $ionicPopup;
@@ -30,6 +31,7 @@ class ParkingRecordController {
                 }
                 ;
                 this.records = yield this.ParkingService.getParkingRecords(plates);
+                //this.$scope.$apply();
                 this.$ionicLoading.hide();
             }
         });

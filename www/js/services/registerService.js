@@ -1,3 +1,4 @@
+//import * as jsSHA from "jssha";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -6,6 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
+class ResponseCode {
+}
+ResponseCode.ok = "ok";
+ResponseCode.fail = "fail";
+ResponseCode.wrongValidCode = "wrongValidCode";
+ResponseCode.phoneExist = "phoneExist";
+ResponseCode.wrongPassword = "wrongPassword";
+ResponseCode.systemError = "systemError";
+ResponseCode.phoneNotExist = "phoneNotExist";
+ResponseCode.noPermission = "noPermission";
 class RegisterService {
     constructor($http, appConfig) {
         this.$http = $http;
@@ -24,7 +35,7 @@ class RegisterService {
             }
             catch (err) {
                 console.log("catch error in register");
-                return false;
+                return ResponseCode.systemError;
             }
             ;
         });
@@ -37,6 +48,7 @@ class RegisterService {
                 'password': password
             };
             var res = yield this.$http.post(this.appConfig.serverPath + 'registerService/login', data);
+            //console.log(res);
             return res.data;
         });
     }
@@ -73,6 +85,7 @@ class RegisterService {
                 'phoneNumber': phoneNumber,
                 'name': name
             };
+            //encodeURIComponent
             let res = yield this.$http.post(this.appConfig.serverPath + 'registerService/changeUserName', data);
             return res.data;
         });
@@ -85,11 +98,19 @@ class RegisterService {
                 'oldPassword': oldPassword,
                 'newPassword': newPassword
             };
+            //encodeURIComponent
             let res = yield this.$http.post(this.appConfig.serverPath + 'registerService/changePassword', data);
             return res.data;
         });
     }
     ;
 }
+// class TestSha {
+//     x() {
+//         var shaObj = new jsSHA("SHA-512", "TEXT");
+//         shaObj.update("This is a test");
+//         var hash = shaObj.getHash("HEX");
+//     }
+// }
 angular.module('starter.services').service('RegisterService', RegisterService);
 //# sourceMappingURL=registerService.js.map

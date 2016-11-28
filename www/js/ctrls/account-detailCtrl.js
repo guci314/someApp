@@ -12,9 +12,9 @@ angular.module('starter.controllers')
                               };
                               RegisterService.getUserByPhoneNumber($rootScope.currentUser.phoneNumber).then(saveUser);      
                             }else{
-                                alertPopup = $ionicPopup.alert({
-                                  title: '修改用户名失败，请检查网络连接'
-                                });
+                                // alertPopup = $ionicPopup.alert({
+                                //   title: '修改用户名失败，请检查网络连接'
+                                // });
                             };
                         }
 

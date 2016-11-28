@@ -16,7 +16,7 @@ class ParkingRecordController {
         this.sync();
 	}
 
-	records: ParkingRecord[];
+	records: CarState[];
 
 	async sync() {
 		if (this.$rootScope.isLogin) {

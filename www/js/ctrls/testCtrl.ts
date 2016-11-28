@@ -1,5 +1,6 @@
 ///<reference path="../../../typings/tsd.d.ts"/>
 ///<reference path="./feeCtrl.ts"/>
+///<reference path="../services/parkingService.ts"/>
 
 interface MyScope extends ng.IScope {
     addTestAccount: any;
@@ -259,7 +260,7 @@ angular.module('starter.controllers')
             let x = await f2();
             console.log(x);
             console.log("end");
-            var p = new InCarState();
+            var p = new CarState();
 
         };
 

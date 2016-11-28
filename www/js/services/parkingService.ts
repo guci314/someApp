@@ -18,9 +18,9 @@ enum CarFlag{
 }
 
 /**
- * 停车状态
+ * 车辆状态
  */
-class InCarState {
+class CarState {
 	binCode: string;
 	binKeyCode: string;
 	id: number;
@@ -32,22 +32,34 @@ class InCarState {
 	stockName: string;
 	version: number;
 	commitFlag: boolean;
+
+    stayMinutes:number;
+	fromId:number;
+	money:number;
+
+    inOutKind:number;
 }
 
 /**
  * 取车状态
  */
-class OutCarState extends InCarState {
-	stayMinutes:number;
-	fromId:number;
-	money:number;
-}
+// class OutCarState extends InCarState {
+// 	stayMinutes:number;
+// 	fromId:number;
+// 	money:number;
+// }
 
 /**
  * 停车记录
  */
-class ParkingRecord extends OutCarState{
-    inOutKind:number;
+// class ParkingRecord extends OutCarState{
+//     inOutKind:number;
+// }
+
+interface IAppConfig{
+    serverPath:string;
+    updateUrl:string;
+    carServicePath:string;
 }
 
 /**
@@ -55,7 +67,7 @@ class ParkingRecord extends OutCarState{
  */
 class ParkingService {
     private $http: ng.IHttpService;
-    private appConfig: any;
+    private appConfig: IAppConfig;
     private $timeout:ng.ITimeoutService;
 
     constructor($http: ng.IHttpService,$timeout:any, appConfig: any) {
@@ -72,11 +84,11 @@ class ParkingService {
     /**
      * 确认停车
      */
-    async CommitInCar(aStockCode: string, aPlateNo: string): Promise<InCarState> {
+    async CommitInCar(aStockCode: string, aPlateNo: string): Promise<CarState> {
         var data = { "aStockCode": aStockCode, "aPlateNo": aPlateNo };
         //encodeURI(aPlateNo)
         let res = await this.$http.post(this.appConfig.carServicePath + "InCarInterface/" + 'CommitInCar', data);
-        return res.data as InCarState;
+        return res.data as CarState;
     };
 
     /**
@@ -84,12 +96,12 @@ class ParkingService {
      */
     async checkInCarStatus(aStockCode: string, aPlateNo: string): Promise<number> {
 		var stopQuery = false;
-		var queryResult: InCarState;
+		var queryResult: CarState;
 		this.$timeout(() => { stopQuery = true; }, 20000);
 		while (!stopQuery) {
 			queryResult = await this.GetInCar(aStockCode, aPlateNo);
-			console.log(queryResult);
-			if ((queryResult.oKFlag === CarFlag.fail) || (queryResult.oKFlag === CarFlag.success)) {
+			//console.log(queryResult);
+			if ((queryResult.oKFlag === CarFlag.fail) || (queryResult.oKFlag === CarFlag.success) || (queryResult.oKFlag === CarFlag.initial)) {
 				break;
 			} else {
 				await this.delay(1000);
@@ -107,8 +119,8 @@ class ParkingService {
 		this.$timeout(() => { stopQuery = true; }, 20000);
 		while (!stopQuery) {
 			queryResult = await this.GetOutCar(aStockCode, plateNo);
-			console.log(queryResult);
-			if ((queryResult.oKFlag === CarFlag.fail) || (queryResult.oKFlag === CarFlag.success)) {
+			//console.log(queryResult);
+			if ((queryResult.oKFlag === CarFlag.fail) || (queryResult.oKFlag === CarFlag.success) || (queryResult.oKFlag === CarFlag.initial)) {
 				break;
 			} else {
 				await this.delay(1000);
@@ -120,56 +132,56 @@ class ParkingService {
     /**
      * 根据一组车牌号获取停车状态
      */
-    async GetInCars(plates:GetCarsParam[]): Promise<InCarState[]> {
+    async GetInCars(plates:GetCarsParam[]): Promise<CarState[]> {
         //var data ={}; //[{ "aPlateNo": aPlateN }];
         let res = await this.$http.post(this.appConfig.carServicePath + "InCarInterface/" + 'GetInCars', plates);
-        return res.data as InCarState[];
+        return res.data as CarState[];
     };
 
     /**
      * 获取停车状态
      */
-    async GetInCar(aStockCode: string, aPlateNo: string): Promise<InCarState> {
+    async GetInCar(aStockCode: string, aPlateNo: string): Promise<CarState> {
         var data = { "aStockCode": aStockCode, "aPlateNo": aPlateNo };
         let res = await this.$http.post(this.appConfig.carServicePath + "InCarInterface/" + 'GetInCar', data);
-        return res.data as InCarState;
+        return res.data as CarState;
     };
 
     /**
      * 根据一组车牌号获取取车状态
      */
-    async GetOutCars(plates:GetCarsParam[]): Promise<OutCarState[]> {
+    async GetOutCars(plates:GetCarsParam[]): Promise<CarState[]> {
         //var data = {};//{ "aPhone": phoneNumber };
         let res = await this.$http.post(this.appConfig.carServicePath + "OutCarInterface/" + 'GetOutCars', plates);
-        return res.data as OutCarState[];
+        return res.data as CarState[];
     };
 
     /**
      * 获取取车状态
      */
-    async GetOutCar(aStockCode: string, aPlateNo: string): Promise<OutCarState> {
+    async GetOutCar(aStockCode: string, aPlateNo: string): Promise<CarState> {
         var data = { "aStockCode": aStockCode, "aPlateNo": aPlateNo };
         let res = await this.$http.post(this.appConfig.carServicePath + "OutCarInterface/" + 'GetOutCar', data);
-        return res.data as OutCarState;
+        return res.data as CarState;
     };
 
     /**
      * 确认取车
      */
-    async CommitOutCar(aStockCode: string, aPlateNo: string): Promise<OutCarState> {
+    async CommitOutCar(aStockCode: string, aPlateNo: string): Promise<CarState> {
         var data = { "aStockCode": aStockCode, "aPlateNo": aPlateNo };
         let res = await this.$http.post(this.appConfig.carServicePath + "OutCarInterface/" + 'CommitOutCar', data);
-        return res.data as OutCarState;
+        return res.data as CarState;
     };
 
     /**
      * 根据一组车牌号获取停车记录
      */
-    async getParkingRecords(plates:GetCarsParam[]): Promise<ParkingRecord[]> {
+    async getParkingRecords(plates:GetCarsParam[]): Promise<CarState[]> {
         //var data={};//{"aPhone":phoneNumber};
         let res= await this.$http.post(this.appConfig.carServicePath + "InOutLogInterface/" + 'GetInOutLogByPhone',plates);
         //console.log(res);
-        return res.data as ParkingRecord[];
+        return res.data as CarState[];
     };
 }
 

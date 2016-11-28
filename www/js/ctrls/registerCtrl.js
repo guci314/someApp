@@ -1,5 +1,3 @@
-///<reference path="../services/registerService.ts" />
-///<reference path="resetPasswordCtrl.ts"/>
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -8,51 +6,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-class LoginController {
+class RegiserController {
     constructor($rootScope, $ionicPopup, $state, RegisterService) {
         this.passwordField = angular.element(document.querySelector('#password'));
         this.$rootScope = $rootScope;
         this.$ionicPopup = $ionicPopup;
         this.$state = $state;
-        this.registerService = RegisterService;
+        this.RegisterService = RegisterService;
     }
-    login() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let res = yield this.registerService.login(this.phoneNumber, this.password);
-            switch (res) {
-                case ResponseCode.ok: {
-                    this.$ionicPopup.alert({
-                        title: '登录成功'
-                    });
-                    this.$rootScope.currentUser = {
-                        'phoneNumber': this.phoneNumber,
-                        'password': this.password
-                    };
-                    let user = yield this.registerService.getUserByPhoneNumber(this.phoneNumber);
-                    this.$rootScope.currentUser = user;
-                    this.$rootScope.isLogin = true;
-                    this.$state.go('tab.account');
-                    break;
-                }
-                case ResponseCode.phoneNotExist: {
-                    this.$ionicPopup.alert({
-                        title: '电话号码不存在'
-                    });
-                    break;
-                }
-                case ResponseCode.wrongPassword: {
-                    this.$ionicPopup.alert({
-                        title: '密码错误'
-                    });
-                    break;
-                }
-                default: {
-                    this.$ionicPopup.alert({
-                        title: '登录失败'
-                    });
-                }
-            }
-            ;
+    getAuthcode() {
+        this.$ionicPopup.alert({
+            title: '验证码已发送'
         });
     }
     ;
@@ -67,6 +31,45 @@ class LoginController {
         }
     }
     ;
+    register() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let data = yield this.RegisterService.register(this.phoneNumber, this.validCode, this.password);
+            switch (data) {
+                case ResponseCode.ok: {
+                    this.$ionicPopup.alert({
+                        title: '注册成功'
+                    });
+                    this.$rootScope.currentUser = {
+                        'phoneNumber': this.phoneNumber,
+                        'password': this.password
+                    };
+                    let user = yield this.RegisterService.getUserByPhoneNumber(this.phoneNumber);
+                    this.$rootScope.currentUser = user;
+                    this.$rootScope.isLogin = true;
+                    this.$state.go('tab.account');
+                    break;
+                }
+                case ResponseCode.phoneExist: {
+                    this.$ionicPopup.alert({
+                        title: '电话号码已存在'
+                    });
+                    break;
+                }
+                case ResponseCode.wrongValidCode: {
+                    this.$ionicPopup.alert({
+                        title: '验证码错误'
+                    });
+                    break;
+                }
+                default: {
+                    this.$ionicPopup.alert({
+                        title: '注册失败'
+                    });
+                }
+            }
+        });
+    }
+    ;
 }
-angular.module('starter.controllers').controller('LoginCtrl', LoginController);
-//# sourceMappingURL=loginCtrl.js.map
+angular.module('starter.controllers').controller('RegisterCtrl', RegiserController);
+//# sourceMappingURL=registerCtrl.js.map
