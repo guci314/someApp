@@ -1,4 +1,9 @@
-///<reference path="../../../typings/tsd.d.ts" />
+// interface IParkingScope extends ng.IScope {
+// 	CommitInCar: any;
+// 	refresh: any;
+// 	GetInCars: any;
+// 	cars: InCarState[];
+// };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -7,12 +12,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-// interface IParkingScope extends ng.IScope {
-// 	CommitInCar: any;
-// 	refresh: any;
-// 	GetInCars: any;
-// 	cars: InCarState[];
-// };
 class ParkingController {
     constructor($scope, $rootScope, $ionicPopup, $state, $timeout, $ionicLoading, ParkingService) {
         this.userIsCommiting = false;

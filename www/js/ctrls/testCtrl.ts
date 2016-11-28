@@ -1,6 +1,3 @@
-///<reference path="../../../typings/tsd.d.ts"/>
-///<reference path="./feeCtrl.ts"/>
-///<reference path="../services/parkingService.ts"/>
 
 interface MyScope extends ng.IScope {
     addTestAccount: any;

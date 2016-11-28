@@ -1,5 +1,35 @@
 {
+  "name": "someapp",
   "globalDependencies": {
-    "angular": "registry:dt/angular#1.5.0+20161101124950"
+    "BatteryStatus": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/BatteryStatus.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Camera": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Camera.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Contacts": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Contacts.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Device": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Device.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "DeviceMotion": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/DeviceMotion.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "DeviceOrientation": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/DeviceOrientation.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Dialogs": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Dialogs.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "FileSystem": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/FileSystem.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "FileTransfer": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/FileTransfer.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Globalization": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Globalization.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "InAppBrowser": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/InAppBrowser.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Keyboard": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Keyboard.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Media": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Media.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "MediaCapture": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/MediaCapture.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "NetworkInformation": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/NetworkInformation.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Push": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Push.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Splashscreen": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Splashscreen.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "StatusBar": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/StatusBar.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "Vibration": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/Vibration.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "WebSQL": "github:DefinitelyTyped/DefinitelyTyped/cordova/plugins/WebSQL.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "angular": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#c3daad4d0547d301ce5dad25138216fa0a30d547",
+    "angular-local-storage": "github:DefinitelyTyped/DefinitelyTyped/angular-local-storage/angular-local-storage.d.ts#6ade7275918f6e95cfeb0fdbe6ce03b5f77ea862",
+    "angular-ui-router": "github:DefinitelyTyped/DefinitelyTyped/angular-ui-router/angular-ui-router.d.ts#c3daad4d0547d301ce5dad25138216fa0a30d547",
+    "cordova": "github:DefinitelyTyped/DefinitelyTyped/cordova/cordova.d.ts#f5ab2df94e1aabf0fc6d783ad01c4c4671760627",
+    "cordova-ionic": "registry:dt/cordova-ionic#0.0.0+20160316155526",
+    "cordova-ionic/plugins/keyboard": "registry:dt/cordova-ionic/plugins/keyboard#0.0.0+20160317120654",
+    "ionic": "registry:dt/ionic#0.0.0+20160907111202",
+    "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#55978642a28584b258e511046b9fb9d09c8a80a4",
+    "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#c3daad4d0547d301ce5dad25138216fa0a30d547",
+    "keyboard": "github:DefinitelyTyped/DefinitelyTyped/cordova-ionic/plugins/keyboard.d.ts#8673f56639274fdfcaa22ded996ec867a5f547df"
   }
 }

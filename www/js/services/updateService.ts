@@ -1,5 +1,4 @@
 
-///<reference path="../../../typings/tsd.d.ts" />
 
 interface IVersion {
     version: string;

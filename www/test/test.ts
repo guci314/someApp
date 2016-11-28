@@ -1,6 +1,3 @@
-///<reference path="../../typings/tsd.d.ts" />
-///<reference path="../js/services/registerService.ts" />
-///<reference path="../js/services/parkingService.ts"/>
 
 describe("myApp", function () {
 

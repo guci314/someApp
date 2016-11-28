@@ -12,6 +12,7 @@
     ],
     "include": [
         "www/js/**/*.ts",
-        "www/test/*.ts"
+        "www/test/*.ts",
+        "typings/index.d.ts"
     ]
 }

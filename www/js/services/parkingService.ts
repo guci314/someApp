@@ -1,4 +1,4 @@
-///<reference path="../../../typings/tsd.d.ts" />
+
 
 /**
  * 车牌号，作为查询参数用

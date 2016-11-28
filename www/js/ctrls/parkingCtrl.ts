@@ -1,4 +1,4 @@
-///<reference path="../../../typings/tsd.d.ts" />
+
 
 // interface IParkingScope extends ng.IScope {
 // 	CommitInCar: any;
