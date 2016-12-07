@@ -65,8 +65,31 @@ class PickupController {
             ;
         });
     }
+    /**
+     * 检验取车验证码
+     */
+    checkComfirmationCode(aStockCode) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let v = yield this.$ionicPopup.prompt({ okText: "确定", cancelText: "取消", title: "请输入取车验证码" });
+            if (v === undefined)
+                return false;
+            let comfirmCode = yield this.ParkingService.GetConfirmationCode(aStockCode);
+            if (v !== comfirmCode) {
+                this.$ionicPopup.alert({ title: "验证码不正确", okText: "确定" });
+                return false;
+            }
+            ;
+            return true;
+        });
+    }
+    /**
+     * 取车
+    */
     CommitOutCar(aStockCode, aPlateNo) {
         return __awaiter(this, void 0, void 0, function* () {
+            let b = yield this.checkComfirmationCode(aStockCode);
+            if (!b)
+                return;
             this.userIsCommiting = true;
             this.showLoading();
             let res = yield this.ParkingService.CommitOutCar(aStockCode, aPlateNo);

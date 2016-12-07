@@ -41,21 +41,8 @@ class CarState {
 }
 
 /**
- * 取车状态
+ * 全局配置
  */
-// class OutCarState extends InCarState {
-// 	stayMinutes:number;
-// 	fromId:number;
-// 	money:number;
-// }
-
-/**
- * 停车记录
- */
-// class ParkingRecord extends OutCarState{
-//     inOutKind:number;
-// }
-
 interface IAppConfig{
     serverPath:string;
     updateUrl:string;
@@ -175,14 +162,30 @@ class ParkingService {
     };
 
     /**
+     * 获取取车验证码
+     */
+    async GetConfirmationCode(aStockCode:string):Promise<string>{
+        var data = { "aStockCode": aStockCode};
+        let res = await this.$http.post(this.appConfig.carServicePath + "OutCarInterface/" + 'GetConfirmationCode', data);
+        return res.data as string;
+    }
+
+    /**
      * 根据一组车牌号获取停车记录
      */
     async getParkingRecords(plates:GetCarsParam[]): Promise<CarState[]> {
-        //var data={};//{"aPhone":phoneNumber};
         let res= await this.$http.post(this.appConfig.carServicePath + "InOutLogInterface/" + 'GetInOutLogByPhone',plates);
-        //console.log(res);
         return res.data as CarState[];
     };
+
+    /**
+     * 分页获取存取车记录
+     */
+    async getRecordsByPageNo(aPageNo:number,aPageSize:number,Plates:GetCarsParam[]){
+        let data={"aPageNo":aPageNo,"aPageSize":aPageSize,"Plates":Plates};
+        let res= await this.$http.post(this.appConfig.carServicePath + "InOutLogInterface/" + 'GetInOutLogsPage',data);
+        return res.data as CarState[];
+    }
 }
 
 angular.module('starter.services').service('ParkingService', ParkingService);

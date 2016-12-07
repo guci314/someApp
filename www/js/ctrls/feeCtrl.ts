@@ -8,9 +8,9 @@ class PickupController {
 	private $timeout: ng.ITimeoutService;
 	private $ionicLoading: ionic.loading.IonicLoadingService
 	private ParkingService: ParkingService;
-	private $ionicHistory:ionic.navigation.IonicHistoryService;
+	private $ionicHistory: ionic.navigation.IonicHistoryService;
 
-	constructor($rootScope: any, $ionicPopup: any, $state: any,$ionicHistory:any, $timeout: any, $ionicLoading: any, ParkingService: any) {
+	constructor($rootScope: any, $ionicPopup: any, $state: any, $ionicHistory: any, $timeout: any, $ionicLoading: any, ParkingService: any) {
 		//console.log("ResetPasswordController constructor is called");
 		this.$rootScope = $rootScope;
 		this.$ionicPopup = $ionicPopup;
@@ -18,13 +18,13 @@ class PickupController {
 		this.ParkingService = ParkingService;
 		this.$timeout = $timeout;
 		this.$ionicLoading = $ionicLoading;
-		this.$ionicHistory=$ionicHistory;
-        
-		if (!this.$rootScope.isLogin){
+		this.$ionicHistory = $ionicHistory;
+
+		if (!this.$rootScope.isLogin) {
 			this.$state.go('tab.login');
 			return;
 		};
-		if (this.$rootScope.currentUser.vehicles.length===0){
+		if (this.$rootScope.currentUser.vehicles.length === 0) {
 			this.$state.go("tab.bindVehicle_fee");
 			return;
 		};
@@ -59,14 +59,33 @@ class PickupController {
 			if (this.$state.current.name !== 'tab.fee') break;
 			if (!this.userIsCommiting) {
 				var cs = await this.ParkingService.GetOutCars(this.plates);
-				if (cs===null)break;
+				if (cs === null) break;
 				this.cars = cs.filter((c) => { return (c.oKFlag != CarFlag.success) });
 			}
 			await this.ParkingService.delay(1000);
 		};
 	}
 
+    /**
+	 * 检验取车验证码
+	 */
+    async checkComfirmationCode(aStockCode: string):Promise<boolean>{
+        let v= await this.$ionicPopup.prompt({okText:"确定",cancelText:"取消",title:"请输入取车验证码"});
+		if (v===undefined) return false;
+		let comfirmCode=await this.ParkingService.GetConfirmationCode(aStockCode);
+		if (v !== comfirmCode){
+			this.$ionicPopup.alert({title:"验证码不正确",okText:"确定"});
+			return false;
+		};
+		return true;
+	}
+
+	/**
+	 * 取车 
+	*/　
 	async CommitOutCar(aStockCode: string, aPlateNo: string) {
+		let b=await this.checkComfirmationCode(aStockCode);
+		if (!b) return;
 		this.userIsCommiting = true;
 		this.showLoading();
 		let res = await this.ParkingService.CommitOutCar(aStockCode, aPlateNo);

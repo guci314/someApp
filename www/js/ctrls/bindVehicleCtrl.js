@@ -23,6 +23,11 @@ class BindVehicleController {
             this.popover = popover;
         });
     }
+    keypress($event) {
+        if ($event.key === '-' || $event.key === '_') {
+            $event.preventDefault();
+        }
+    }
     delete(id, index) {
         return __awaiter(this, void 0, void 0, function* () {
             let res = yield this.$ionicPopup.confirm({

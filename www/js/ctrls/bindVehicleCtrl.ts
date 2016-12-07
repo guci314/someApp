@@ -27,6 +27,12 @@ class BindVehicleController {
     plate: string;
     autoCharge: boolean = false;
 
+    keypress($event: KeyboardEvent) {
+        if ($event.key === '-' || $event.key === '_') {
+            $event.preventDefault();
+        }
+    }
+
     async delete(id: number, index: number) {
         let res = await this.$ionicPopup.confirm({
             title: "确认删除",
@@ -78,7 +84,7 @@ class BindVehicleController {
         if (res) {
             this.$ionicPopup.alert({
                 title: "绑定成功",
-                okText:"确定"
+                okText: "确定"
             });
             this.$rootScope.currentUser.vehicles.push(res);
             //$rootScope.$apply();

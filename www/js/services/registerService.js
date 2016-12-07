@@ -72,6 +72,9 @@ class RegisterService {
         });
     }
     ;
+    /**
+     * 根据电话号码获取用户数据，级联加载车辆数据
+     */
     getUserByPhoneNumber(phoneNumber) {
         return __awaiter(this, void 0, void 0, function* () {
             let res = yield this.$http.get(this.appConfig.serverPath + 'registerService/getUserByPhoneNumber?phoneNumber=' + phoneNumber);

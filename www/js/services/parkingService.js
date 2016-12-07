@@ -155,17 +155,35 @@ class ParkingService {
     }
     ;
     /**
+     * 获取取车验证码
+     */
+    GetConfirmationCode(aStockCode) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var data = { "aStockCode": aStockCode };
+            let res = yield this.$http.post(this.appConfig.carServicePath + "OutCarInterface/" + 'GetConfirmationCode', data);
+            return res.data;
+        });
+    }
+    /**
      * 根据一组车牌号获取停车记录
      */
     getParkingRecords(plates) {
         return __awaiter(this, void 0, void 0, function* () {
-            //var data={};//{"aPhone":phoneNumber};
             let res = yield this.$http.post(this.appConfig.carServicePath + "InOutLogInterface/" + 'GetInOutLogByPhone', plates);
-            //console.log(res);
             return res.data;
         });
     }
     ;
+    /**
+     * 分页获取存取车记录
+     */
+    getRecordsByPageNo(aPageNo, aPageSize, Plates) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let data = { "aPageNo": aPageNo, "aPageSize": aPageSize, "Plates": Plates };
+            let res = yield this.$http.post(this.appConfig.carServicePath + "InOutLogInterface/" + 'GetInOutLogsPage', data);
+            return res.data;
+        });
+    }
 }
 angular.module('starter.services').service('ParkingService', ParkingService);
 //# sourceMappingURL=parkingService.js.map

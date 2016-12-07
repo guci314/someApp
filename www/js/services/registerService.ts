@@ -60,6 +60,9 @@ class RegisterService {
         };
     };
 
+    /**
+     * 根据电话号码获取用户数据，级联加载车辆数据
+     */
     async getUserByPhoneNumber(phoneNumber: string): Promise<User> {
         let res = await this.$http.get(this.appConfig.serverPath + 'registerService/getUserByPhoneNumber?phoneNumber=' + phoneNumber);
         return res.data as User;

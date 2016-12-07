@@ -46,6 +46,5 @@
   },
   "_source": "https://github.com/pivotal/jasmine.git",
   "_target": "^2.5.2",
-  "_originalSource": "jasmine",
-  "_direct": true
+  "_originalSource": "jasmine"
 }

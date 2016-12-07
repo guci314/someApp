@@ -12,6 +12,9 @@ class Vehicle{
     autoCharge:boolean;
 }
 
+/**
+ * 伟创停车rootScope
+ */
 interface IParkingRootScope extends ng.IRootScopeService{
     currentUser:User;
     isLogin:boolean;

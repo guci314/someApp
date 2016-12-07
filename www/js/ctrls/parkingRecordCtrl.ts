@@ -13,28 +13,58 @@ class ParkingRecordController {
 		this.$ionicPopup = $ionicPopup;
 		this.ParkingService = ParkingService;
 		this.$ionicLoading = $ionicLoading;
-        this.sync();
+
+		for (let v of this.$rootScope.currentUser.vehicles) {
+			var p = new GetCarsParam();
+			p.aPlateNo = v.plate;
+			this.plates.push(p);
+		};
+
+
+		// this.$scope.$on('$stateChangeSuccess', ()=>{
+		// 	this.$scope.loadMore();
+		// });
+		this.loadFirstPage();
 	}
 
-	records: CarState[];
+    records: CarState[]=[];
+	pageNumber = 0;
+	plates: GetCarsParam[] = [];
+	noMoreItemsAvailable: boolean=false;
 
-	async sync() {
+
+	async loadMore() {
+		this.pageNumber = this.pageNumber + 1;
+		console.log("loadMore,page number:"+this.pageNumber);
+		if (this.pageNumber>10) this.noMoreItemsAvailable=true;
+		// let recs = await this.ParkingService.getRecordsByPageNo(this.pageNumber,10,this.plates);
+		// this.records = this.records.concat(recs);
+		// console.log("recorder size:" + this.records.length.toString());
+		this.$scope.$broadcast('scroll.infiniteScrollComplete');
+		// if (recs.length ===0 ) this.noMoreItemsAvailable=true;
+	};
+
+	async loadFirstPage() {
 		if (this.$rootScope.isLogin) {
 			this.$ionicLoading.show({
 				template: '<p>请稍候...</p><ion-spinner></ion-spinner>',
-				duration: 100000
+				duration: 20000
 			});
-			var plates: GetCarsParam[] = [];
-			for (let v of this.$rootScope.currentUser.vehicles) {
-				var p = new GetCarsParam();
-				p.aPlateNo = v.plate;
-				plates.push(p);
-			};
-			this.records = await this.ParkingService.getParkingRecords(plates);
+			this.records = await this.ParkingService.getRecordsByPageNo(this.pageNumber,10,this.plates);
 			//this.$scope.$apply();
 			this.$ionicLoading.hide();
 		}
 	};
+
+	// loadMore() {
+	// 	this.ParkingService.getParkingRecords(this.plates).then(recs => {
+	// 		this.$scope.records.concat(recs);
+	// 		console.log("records length:" + this.$scope.records.length.toString());
+	// 		if (this.$scope.records.length > 500) this.$scope.noMoreItemsAvailable = true;
+	// 		this.$scope.$broadcast('scroll.infiniteScrollComplete');
+	// 	});
+
+	// }
 }
 
 angular.module('starter.controllers')

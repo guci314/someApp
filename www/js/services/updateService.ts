@@ -1,9 +1,10 @@
-
-
 interface IVersion {
     version: string;
 }
 
+/**
+ * 更新服务
+ */
 class UpdateService {
 
     private $rootScope: any;
@@ -15,7 +16,7 @@ class UpdateService {
     private $cordovaFileTransfer: any;
     private appConfig: IAppConfig;
 
-    constructor($rootScope:any,$ionicModal: any, $ionicPopup: any, $http: any, $cordovaAppVersion: any, $cordovaFileTransfer: any, appConfig: any) {
+    constructor($rootScope: any, $ionicModal: any, $ionicPopup: any, $http: any, $cordovaAppVersion: any, $cordovaFileTransfer: any, appConfig: any) {
         this.$rootScope = $rootScope;
         //this.$ionicPlatform = $ionicPlatform;
         this.$ionicModal = $ionicModal;
@@ -26,22 +27,22 @@ class UpdateService {
         this.appConfig = appConfig;
     }
 
-    //downloadProgress: number;
-
-    async update() {
-        //await this.$ionicPlatform.ready();
+    /**
+     * 检测新版本，并询问用户是否更新
+     */
+    async checkNewVersion(): Promise<boolean> {
         let localVersion = await this.$cordovaAppVersion.getVersionNumber();
         let v = await this.$http.get(this.appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
-                cache: false
-            });
-        if (v.data==null){
-            await this.$ionicPopup.alert({title:"无法连接更新服务器"});
-            return;
+            cache: false
+        });
+        if (v.data == null) {
+            //await this.$ionicPopup.alert({title:"无法连接更新服务器"});
+            return false;
         }
         let serverVersion = (v.data as IVersion).version;
         if (localVersion == serverVersion) {
-            await this.$ionicPopup.alert({title:'已经是最新版本'});
-            return;
+            //await this.$ionicPopup.alert({title:'已经是最新版本'});
+            return false;
         }
         let userConfirm: boolean = await this.$ionicPopup.confirm({
             title: "发现新版本",
@@ -49,8 +50,14 @@ class UpdateService {
             okText: "确定",
             cancelText: "取消"
         });
-        if (!userConfirm) return;
 
+        return userConfirm;
+    }
+
+    /**
+     * 安装新版本
+     */
+    async install() {
         var progressModal = await this.$ionicModal.fromTemplate(progressTemplet, {
             scope: this.$rootScope,
             backdropClickToClose: true,
@@ -76,7 +83,7 @@ class UpdateService {
             (error: any) => {
                 downloadSucces = false;
                 console.log(JSON.stringify(error));
-                this.$ionicPopup.alert({title:'下载文件发生错误'});
+                this.$ionicPopup.alert({ title: '下载文件发生错误',okText:"确定" });
             },
             (progress: any) => {
                 this.$rootScope.downloadProgress = (progress.loaded / progress.total) * 100;
@@ -93,9 +100,38 @@ class UpdateService {
         },
             () => { },
             (e: any) => {
-                this.$ionicPopup.alert({title:"安装程序发生错误"});
+                this.$ionicPopup.alert({ title: "安装程序发生错误" ,okText:"确定"});
             }
         );
+    }
+
+    /**
+     * 检测更新，用户选择是否安装
+     */
+    async update() {
+        //await this.$ionicPlatform.ready();
+        let localVersion = await this.$cordovaAppVersion.getVersionNumber();
+        let v = await this.$http.get(this.appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
+            cache: false
+        });
+        if (v.data == null) {
+            await this.$ionicPopup.alert({ title: "无法连接更新服务器" ,okText:"确定"});
+            return;
+        }
+        let serverVersion = (v.data as IVersion).version;
+        if (localVersion == serverVersion) {
+            await this.$ionicPopup.alert({ title: '已经是最新版本' ,okText:"确定"});
+            return;
+        }
+        let userConfirm: boolean = await this.$ionicPopup.confirm({
+            title: "发现新版本",
+            template: "现在立即更新吗?",
+            okText: "确定",
+            cancelText: "取消"
+        });
+        if (!userConfirm) return;
+
+        this.install();
     }
 }
 

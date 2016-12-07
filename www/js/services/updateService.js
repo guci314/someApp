@@ -6,6 +6,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
+/**
+ * 更新服务
+ */
 class UpdateService {
     constructor($rootScope, $ionicModal, $ionicPopup, $http, $cordovaAppVersion, $cordovaFileTransfer, appConfig) {
         this.$rootScope = $rootScope;
@@ -17,22 +20,23 @@ class UpdateService {
         this.$cordovaFileTransfer = $cordovaFileTransfer;
         this.appConfig = appConfig;
     }
-    //downloadProgress: number;
-    update() {
+    /**
+     * 检测新版本，并询问用户是否更新
+     */
+    checkNewVersion() {
         return __awaiter(this, void 0, void 0, function* () {
-            //await this.$ionicPlatform.ready();
             let localVersion = yield this.$cordovaAppVersion.getVersionNumber();
             let v = yield this.$http.get(this.appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
                 cache: false
             });
             if (v.data == null) {
-                yield this.$ionicPopup.alert({ title: "无法连接更新服务器" });
-                return;
+                //await this.$ionicPopup.alert({title:"无法连接更新服务器"});
+                return false;
             }
             let serverVersion = v.data.version;
             if (localVersion == serverVersion) {
-                yield this.$ionicPopup.alert({ title: '已经是最新版本' });
-                return;
+                //await this.$ionicPopup.alert({title:'已经是最新版本'});
+                return false;
             }
             let userConfirm = yield this.$ionicPopup.confirm({
                 title: "发现新版本",
@@ -40,8 +44,14 @@ class UpdateService {
                 okText: "确定",
                 cancelText: "取消"
             });
-            if (!userConfirm)
-                return;
+            return userConfirm;
+        });
+    }
+    /**
+     * 安装新版本
+     */
+    install() {
+        return __awaiter(this, void 0, void 0, function* () {
             var progressModal = yield this.$ionicModal.fromTemplate(progressTemplet, {
                 scope: this.$rootScope,
                 backdropClickToClose: true,
@@ -66,7 +76,7 @@ class UpdateService {
             }, (error) => {
                 downloadSucces = false;
                 console.log(JSON.stringify(error));
-                this.$ionicPopup.alert({ title: '下载文件发生错误' });
+                this.$ionicPopup.alert({ title: '下载文件发生错误', okText: "确定" });
             }, (progress) => {
                 this.$rootScope.downloadProgress = (progress.loaded / progress.total) * 100;
             });
@@ -80,8 +90,38 @@ class UpdateService {
                 url: targetPath,
                 type: 'application/vnd.android.package-archive' //'text/plain' //'application/vnd.android.package-archive'
             }, () => { }, (e) => {
-                this.$ionicPopup.alert({ title: "安装程序发生错误" });
+                this.$ionicPopup.alert({ title: "安装程序发生错误", okText: "确定" });
             });
+        });
+    }
+    /**
+     * 检测更新，用户选择是否安装
+     */
+    update() {
+        return __awaiter(this, void 0, void 0, function* () {
+            //await this.$ionicPlatform.ready();
+            let localVersion = yield this.$cordovaAppVersion.getVersionNumber();
+            let v = yield this.$http.get(this.appConfig.updateUrl + 'version.json' + "?ts=" + Date.now(), {
+                cache: false
+            });
+            if (v.data == null) {
+                yield this.$ionicPopup.alert({ title: "无法连接更新服务器", okText: "确定" });
+                return;
+            }
+            let serverVersion = v.data.version;
+            if (localVersion == serverVersion) {
+                yield this.$ionicPopup.alert({ title: '已经是最新版本', okText: "确定" });
+                return;
+            }
+            let userConfirm = yield this.$ionicPopup.confirm({
+                title: "发现新版本",
+                template: "现在立即更新吗?",
+                okText: "确定",
+                cancelText: "取消"
+            });
+            if (!userConfirm)
+                return;
+            this.install();
         });
     }
 }
